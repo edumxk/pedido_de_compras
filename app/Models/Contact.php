@@ -11,9 +11,8 @@ class Contact extends Model
     //as many as contacts can have one supplier
     public function supplier()
     {
-        return $this->belongsTo(Supllier::class);
+        return $this->belongsTo(Supplier::class);
     }
-    //fillables
     protected $fillable = [
         'name',
         'email',

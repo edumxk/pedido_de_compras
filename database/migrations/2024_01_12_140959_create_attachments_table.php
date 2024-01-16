@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('path');
+            $table->foreignId('budget_id')->constrained('budgets');
             $table->timestamps();
         });
     }

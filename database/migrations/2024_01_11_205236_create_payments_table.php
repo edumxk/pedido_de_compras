@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-            $table->string('type');
+            $table->enum('type',['debito','credito', 'boleto', 'pix', 'dinheiro', 'cheque', 'outros']);
             $table->string('installments');
             $table->string('days');
             $table->timestamps();
