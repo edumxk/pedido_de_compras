@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('purchase_orders', function (Blueprint $table) {
+        Schema::create('attachments', function (Blueprint $table) {
             $table->id();
-            $table->string('purchase_subject');
-            $table->text('description');
-            $table->enum('status',['opened','budget','rejected', 'approved', 'provision', 'purchase', 'received', 'finished' ])->default('opened');
-            $table->foreignId('user_id')->constrained('users');
+            $table->string('name');
+            $table->string('path');
+            $table->foreignId('budget_id')->nullable()->constrained('budgets');
+            $table->foreignId('interaction_id')->nullable()->constrained('interactions');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('purchase_orders');
+        Schema::dropIfExists('attachments');
     }
 };

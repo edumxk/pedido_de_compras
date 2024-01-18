@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attachments', function (Blueprint $table) {
+        Schema::create('interactions', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('path');
-            $table->foreignId('budget_id')->constrained('budgets');
+            $table->foreignId('purchase_order_id')->constrained('purchase_orders')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users');
+            $table->text('body');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('attachments');
+        Schema::dropIfExists('interactions');
     }
 };
