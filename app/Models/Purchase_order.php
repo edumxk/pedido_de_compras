@@ -14,6 +14,7 @@ class Purchase_order extends Model
         'description',
         'status',
         'user_id',
+        'department_id',
     ];
 
     public static function create(array $array)
@@ -25,6 +26,11 @@ class Purchase_order extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
     }
 
 

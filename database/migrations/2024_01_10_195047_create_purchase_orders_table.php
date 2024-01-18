@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->enum('status',['opened','budget','rejected', 'approved', 'provision', 'purchase', 'received', 'finished' ])->default('opened');
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('department_id')->constrained('departments');
             $table->timestamps();
         });
     }
