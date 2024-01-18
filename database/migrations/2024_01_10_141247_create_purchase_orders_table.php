@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('purchase_orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('purchase_subject');
-            $table->string('description');
+            $table->string('purchase_subject');
+            $table->text('description');
             $table->enum('status',['opened','budget','rejected', 'approved', 'provision', 'purchase', 'received', 'finished' ])->default('opened');
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();

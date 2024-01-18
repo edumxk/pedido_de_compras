@@ -17,6 +17,7 @@ return new class extends Migration
             $table->enum('status',['pending','approved','rejected'])->default('pending');
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('payment_id')->constrained('payments');
+            $table->foreignId('purchase_order_id')->constrained('purchase_orders');
             $table->timestamps();
         });
     }
