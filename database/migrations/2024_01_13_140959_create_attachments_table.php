@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('path');
+            $table->string('file_name');
+            $table->string('file_path');
+            $table->string('file_type');
+            $table->string('file_extension');
+            $table->string('file_size');
+            $table->foreignId('purchase_order_id')->nullable()->constrained('purchase_orders');
             $table->foreignId('budget_id')->nullable()->constrained('budgets');
             $table->foreignId('interaction_id')->nullable()->constrained('interactions');
             $table->timestamps();

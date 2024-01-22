@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -37,6 +38,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchase_orders/create', [PurchaseOrderController::class, 'create'])->name('purchase_orders.create');
     Route::get('/purchase_orders/{purchase_order}', [PurchaseOrderController::class, 'show'])->name('purchase_orders.show');
     Route::patch('/purchase_orders/{purchase_order}', [PurchaseOrderController::class, 'update'])->name('purchase_orders.update');
+
+    //attachments routes
+    Route::post('/attachments/upload/{id}', [AttachmentController::class, 'upload'])->name('attachments.upload');
+    Route::get('/attachments/download/{attachment}', [AttachmentController::class, 'download'])->name('attachments.download');
+    Route::get('/attachments/view/{attachment}', [AttachmentController::class, 'view'])->name('attachments.view');
+    Route::delete('/attachments/delete/{attachment}', [AttachmentController::class, 'destroy'])->name('attachments.destroy');
 });
 
 require __DIR__.'/auth.php';

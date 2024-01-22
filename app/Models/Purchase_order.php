@@ -33,5 +33,10 @@ class Purchase_order extends Model
         return $this->belongsTo(Department::class);
     }
 
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
+    }
+
 
 }
