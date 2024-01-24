@@ -38,5 +38,10 @@ class Purchase_order extends Model
         return $this->hasMany(Attachment::class);
     }
 
+    public function interactions()
+    {
+        return $this->hasMany(Interaction::class);
+    }
+
 
 }

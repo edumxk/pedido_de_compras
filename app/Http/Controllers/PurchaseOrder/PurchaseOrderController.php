@@ -43,16 +43,15 @@ class PurchaseOrderController extends Controller
     {
         //get the purchase_order
         $purchase_order = Purchase_order::findOrFail($id);
+        $departments = Department::all();
 
-        return view('purchase_orders.show', compact('purchase_order'));
+        return view('purchase_orders.show', compact('purchase_order', 'departments'));
     }
 
     public function update(CreateUpdateOrderRequest $request, string|int $id)
     {
-        //get the purchase_order
         $purchase_order = Purchase_order::findOrFail($id);
 
-        //update the purchase_order
         $purchase_order->update([
             'purchase_subject' => $request->purchase_subject,
             'description' => $request->description,
@@ -60,8 +59,10 @@ class PurchaseOrderController extends Controller
             'department_id' => $request->department_id,
         ]);
 
-        //redirect to purchase_orders page
-        return redirect('/purchase_orders');
+        //refresh the page with message success or error
+        return redirect()->back()->with('message', 'Purchase Order Updated Successfully');
     }
+
+
 
 }

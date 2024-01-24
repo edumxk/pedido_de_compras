@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class AttachmentController extends Controller
 {
-    public function upload(Request $request, $purchase_order_id)
+    public function upload(Request $request)
     {
         $file = $request->file('file');
         $file_name = md5($file->getClientOriginalName().now()) . '.' . $file->getClientOriginalExtension();
@@ -22,9 +22,9 @@ class AttachmentController extends Controller
             'file_type' => $file_type,
             'file_size' => $file_size,
             'file_extension' => $file->getClientOriginalExtension(),
-            'purchase_order_id' => $purchase_order_id,
+            'purchase_order_id' => $request->purchase_order_id,
             'budget_id' => $request->budget_id,
-            'interaction_id' => $request->interaction_id,
+            'interaction_id' => $request->interaction_id
         ]);
 
         //return redirect back with success message

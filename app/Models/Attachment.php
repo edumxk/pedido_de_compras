@@ -26,4 +26,14 @@ class Attachment extends Model
         return $this->belongsTo(Purchase_order::class);
     }
 
+    public function budget()
+    {
+        return $this->belongsTo(Budget::class);
+    }
+
+    public function interaction()
+    {
+        return $this->belongsTo(Interaction::class);
+    }
+
 }
