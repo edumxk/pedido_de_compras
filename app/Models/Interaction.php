@@ -15,6 +15,12 @@ class Interaction extends Model
         'purchase_order_id',
     ];
 
+    public static function create(array $array)
+    {
+        //save the interaction
+        $interaction = static::query()->create($array);
+    }
+
     public function purchaseOrder()
     {
         return $this->belongsTo(PurchaseOrder::class);
@@ -29,4 +35,6 @@ class Interaction extends Model
     {
         return $this->hasMany(Attachment::class);
     }
+
+
 }

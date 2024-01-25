@@ -4,10 +4,12 @@ namespace App\Http\Controllers\PurchaseOrder;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUpdateOrderRequest;
+use App\Models\Interaction;
 use App\Models\Purchase_order;
 use Illuminate\Http\Request;
 use App\Models\Department;
 use App\Models\Position;
+use Illuminate\Support\Facades\Auth;
 
 class PurchaseOrderController extends Controller
 {
@@ -61,6 +63,39 @@ class PurchaseOrderController extends Controller
 
         //refresh the page with message success or error
         return redirect()->back()->with('message', 'Purchase Order Updated Successfully');
+    }
+
+    public function approve(Request $request)
+    {
+        if(Auth()->user()->is_admin == 1){
+            //validate the request
+            $request->validate([
+                'purchase_order_id' => 'required|integer',
+                'status' => 'required|string',
+            ]);
+
+            $message = 'Purchase Order ' .$request->status. " Successfully \n" .$request->body;
+            //save new status
+            Interaction::create([
+                'purchase_order_id' => $request->purchase_order_id,
+                'body' =>  $message,
+                'user_id' => auth()->id(),
+            ]);
+            //update the purchase_order status
+            $purchase_order = Purchase_order::findOrFail($request->purchase_order_id);
+            $purchase_order->update([
+                'status' => $request->status,
+            ]);
+
+            //refresh the page with message success or error
+            return redirect()->back()->with('message', 'Purchase Order ' .$request->status. ' Successfully');
+
+        }else{
+            dd('You are not authorized to perform this action');
+            return redirect()->back()->with('message', 'You are not authorized to perform this action');
+        }
+
+
     }
 
 

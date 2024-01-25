@@ -10,13 +10,13 @@ class AttachmentController extends Controller
 {
     public function upload(Request $request)
     {
+
         $file = $request->file('file');
         $file_name = md5($file->getClientOriginalName().now()) . '.' . $file->getClientOriginalExtension();
         $file_path = $file->storeAs('attachments', $file_name, 'public');
         $file_type = $file->getClientMimeType();
         $file_size = $file->getSize();
-
-        $attachment = Attachment::create([
+        $data = [
             'file_name' => $file_name,
             'file_path' => $file_path,
             'file_type' => $file_type,
@@ -25,9 +25,10 @@ class AttachmentController extends Controller
             'purchase_order_id' => $request->purchase_order_id,
             'budget_id' => $request->budget_id,
             'interaction_id' => $request->interaction_id
-        ]);
+        ];
 
-        //return redirect back with success message
+        Attachment::create($data);
+
         return redirect()->back()->with('success', 'Attachment uploaded successfully');
 
     }

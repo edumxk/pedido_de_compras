@@ -29,9 +29,9 @@
         <div class="">
             <button class="rounded bg-red-500 p-3" type="submit">Salvar Edição</button>
         </div>
-        <div>
-            <x-attachment :purchase_order="$purchase_order" :type="'order'" />
-            <x-upload-attachment :purchase_order="$purchase_order" :interaction="null" :budget="null"/>
-        </div>
     </form>
+    <div>
+        <x-attachment :purchase_order="$purchase_order" :type="'order'" />
+        <x-upload-attachment :purchase_order="$purchase_order" :interaction="null" :budget="null"/>
+    </div>
 </div>

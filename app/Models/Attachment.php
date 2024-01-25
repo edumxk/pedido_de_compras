@@ -21,6 +21,12 @@ class Attachment extends Model
         'interaction_id',
     ];
 
+    public static function create(array $array)
+    {
+        //save the attachment
+        $attachment = static::query()->create($array);
+    }
+
     public function purchaseOrder()
     {
         return $this->belongsTo(Purchase_order::class);
