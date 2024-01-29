@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/purchase_orders', [PurchaseOrderController::class, 'index'])->name('purchase_orders.index');
+    Route::post('/purchase_orders', [PurchaseOrderController::class, 'index'])->name('purchase_orders.index');
     Route::post('/purchase_orders/approve', [PurchaseOrderController::class, 'approve'])->name('purchase_orders.approve');
     Route::post('/purchase_orders/create', [PurchaseOrderController::class, 'store'])->name('purchase_orders.store');
     Route::get('/purchase_orders/create', [PurchaseOrderController::class, 'create'])->name('purchase_orders.create');

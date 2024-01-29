@@ -1,48 +1,30 @@
 <x-app-layout>
-
-    <div>
-        <div class="p-4">
-
-            <a class="bg-white rounded border-gray-500 p-1" href=" {{ route('purchase_orders.create') }} ">{{ __('Nova ordem de Compra') }}</a>
-
+    <div class="bg-white dark:bg-gray-800 p-6  min-w-[130rem] mx-auto border p-2 rounded-md mt-8 overflow-y-hidden ">
+        <div class="py-4">
+            <a class="mt-4 inline-block bg-blue-500 text-white rounded px-4 py-2" href=" {{ route('purchase_orders.create') }} ">{{ __('Nova ordem de Compra') }}</a>
         </div>
 
-
+        <x-filter-index :departments="$departments" />
 
         @if($purchase_orders)
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-                                {{ __('Assunto') }}
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                {{ __('Descrição') }}</th>
-                            <th scope="col" class="px-6 py-3">
-                                {{ __('Solicitante') }}</th>
-                            <th scope="col" class="px-6 py-3">
-                                {{ __('Status') }}</th>
-                            <th scope="col" class="px-6 py-3">
-                                {{ __('Departamento') }}</th>
-                            <th scope="col" class="px-6 py-3">
-                                {{ __('Abertura') }}</th>
-                            </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($purchase_orders as $purchase_order)
-                       <tr>
-                            <td>{{ $purchase_order->purchase_subject }}</td>
-                           <td> <a href="{{ route('purchase_orders.show', $purchase_order->id) }}"> {{ substr($purchase_order->description, 0,75).'...' }}</a></td>
-                            <td>{{ $purchase_order->user->name }}</td>
-                            <td>{{ $purchase_order->status }}</td>
-                            <td>{{ $purchase_order->department->name }}</td>
-                            <td>{{ date_format($purchase_order->created_at,'d/m/Y H:i') }}</td>
-                       </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+            <div class="grid grid-rows-1 grid-rows-subgrid sm:grid-cols-8 gap-4 sm:overflow-x-auto sm:grid-auto-flow max-w-auto ">
+                @foreach(['opened', 'approved', 'budget', 'provision', 'purchase', 'received', 'finished','rejected'] as $status)
+                    <div class="min-w-64 max-w-64">
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 text-center">{{ ucfirst($status) }}</h2>
+                        @foreach($purchase_orders->where('status', $status) as $purchase_order)
+                            <div class="bg-white dark:bg-gray-800 p-4 rounded-md border border-gray-200 dark:border-gray-700 shadow m-2 min-h-64">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $purchase_order->purchase_subject }}</h3>
+                                <p class="mt-2 text-gray-600 dark:text-gray-300">{{ __($purchase_order->user->name) }}</p>
+                                <p class="mt-2 text-gray-600 dark:text-gray-300">{{ __($purchase_order->department->name) }}</p>
+                                <p class="mt-2 text-gray-600 dark:text-gray-300"> {{ date_format($purchase_order->created_at,'d/m/Y H:i') }}</p>
+                                <a href="{{ route('purchase_orders.show', $purchase_order->id) }}" class="mt-4 inline-block bg-blue-500 text-white rounded px-4 py-2">{{ __('Ver detalhes') }}</a>
+                            </div>
+                        @endforeach
+                    </div>
+                @endforeach
             </div>
         @endif
     </div>
+
+
 </x-app-layout>

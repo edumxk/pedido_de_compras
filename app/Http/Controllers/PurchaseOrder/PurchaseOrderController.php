@@ -13,12 +13,40 @@ use Illuminate\Support\Facades\Auth;
 
 class PurchaseOrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        //get all purchase_orders
-        $purchase_orders = Purchase_order::all();
+        // If the request method is POST, use the request data. Otherwise, use the query string.
+        $requestData = $request->isMethod('post') ? $request->all() : $request->query();
 
-        return view('purchase_orders.purchase_orders', compact('purchase_orders'));
+        //get all purchase_orders
+        $purchase_orders = Purchase_order::query();
+
+        // Filter by subject and description
+        if ($request->has('subject_description')) {
+            $purchase_orders->where(function ($query) use ($request) {
+                $query->where('purchase_subject', 'like', '%' . $request->subject_description . '%')
+                    ->orWhere('description', 'like', '%' . $request->subject_description . '%');
+            });
+        }
+
+        // Filter by department id
+        if ($request->has('department_id') && $request->department_id != '') {
+            $purchase_orders->where('department_id', $request->department_id);
+        }
+
+        // Filter by user name
+        if ($request->has('user_name')) {
+            $purchase_orders->whereHas('user', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->user_name . '%');
+            });
+        }
+
+        $purchase_orders = $purchase_orders->get();
+
+        // Get all departments
+        $departments = Department::all();
+
+        return view('purchase_orders.purchase_orders', compact('purchase_orders', 'departments'));
     }
 
     public function create()
