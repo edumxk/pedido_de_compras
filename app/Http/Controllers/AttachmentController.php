@@ -29,7 +29,7 @@ class AttachmentController extends Controller
 
         Attachment::create($data);
 
-        return redirect()->back()->with('success', 'Attachment uploaded successfully');
+        return redirect()->back()->with('message', 'Attachment uploaded successfully');
 
     }
 

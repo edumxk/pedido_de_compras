@@ -16,12 +16,17 @@ class DatabaseSeeder extends Seeder
              'name' => 'Eduardo Patrick',
             'email' => 'teste@teste.com',
             'nickname' => 'edumxk',
+            'is_admin' => true,
             'password' => bcrypt('strw4mxk'),
          ]);
 
         $this->call([
             DepartmentsSeeder::class,
-            PositionsSeeder::class]);
+            PositionsSeeder::class,
+            ProductCategoriesSeeder::class,
+            ProductsSeeder::class,
+            SuppliersSeeder::class,
+        ]);
 
     }
 }

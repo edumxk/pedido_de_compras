@@ -4,3 +4,4 @@ document.querySelectorAll('[id^="toggleButton"]').forEach(function(button) {
         document.getElementById('uploads' + id).classList.toggle('hidden');
     });
 });
+

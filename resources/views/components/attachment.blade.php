@@ -1,6 +1,6 @@
 @props(['purchase_order']) @props(['type']) @props(['interaction']) @props(['budget'])
-<div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-    <div class="flex flex-col md:flex-row gap-6 mt-10">
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8 dark:bg-gray-800 bg-white">
+    <div class="flex flex-row flex-wrap gap-4 mt-10 justify-start">
         @php
             $attachments = collect();
             if($type == 'order') {
@@ -12,7 +12,7 @@
         @endphp
 
         @foreach($attachments as $attachment)
-            <div class="flex-1 text-center">
+            <div class="flex-1 text-center dark:text-white text-gray-800">
                 <a class="flex justify-center cursor-pointer" onclick="openPopup('{{ asset('storage/' . $attachment['file_path']) }}')">
                     @if($attachment->file_type == 'application/pdf')
                         <x-far-file-pdf width="30px" height="30px" />
@@ -30,7 +30,7 @@
                         <x-grommet-form-attachment width="30px" height="30px" />
                     @endif
                 </a>
-                <span class="text-sm">{{ date_format($attachment->created_at, 'd/m/y H:i:s') }}</span>
+                <span class="text-sm dark:text-gray-300 text-gray-600">{{ date_format($attachment->created_at, 'd/m/y H:i:s') }}</span>
             </div>
         @endforeach
     </div>

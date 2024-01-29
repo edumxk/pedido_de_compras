@@ -17,7 +17,7 @@ class Purchase_order extends Model
         'department_id',
     ];
 
-    public static function create(array $array)
+    public static function create(array $array): void
     {
         //save the purchase_order
         $purchase_order = static::query()->create($array);
@@ -41,6 +41,11 @@ class Purchase_order extends Model
     public function interactions()
     {
         return $this->hasMany(Interaction::class);
+    }
+
+    public function budgets()
+    {
+        return $this->hasMany(Budget::class);
     }
 
 

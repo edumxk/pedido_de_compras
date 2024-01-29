@@ -21,7 +21,7 @@ class Attachment extends Model
         'interaction_id',
     ];
 
-    public static function create(array $array)
+    public static function create(array $array): void
     {
         //save the attachment
         $attachment = static::query()->create($array);
