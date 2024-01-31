@@ -20,4 +20,15 @@ class Contact extends Model
         'whatsapp',
         'supplier_id',
     ];
+
+    public function create(array $data)
+    {
+        return Contact::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'call' => $data['call'],
+            'whatsapp' => $data['whatsapp'],
+            'supplier_id' => $data['supplier_id'],
+        ]);
+    }
 }

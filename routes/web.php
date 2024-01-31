@@ -5,6 +5,7 @@ use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\InteractionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PurchaseOrder\PurchaseOrderController;
@@ -57,6 +58,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/budgets/{hashedId}', [BudgetController::class, 'index'])->name('budgets.index');
     Route::get('/budgets/create/{hashedId}', [BudgetController::class, 'create'])->name('budgets.create');
     Route::post('/budgets/create', [BudgetController::class, 'store'])->name('budget.create');
+
+    //supplier routes
+    Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
+    Route::get('/suppliers/create', [SupplierController::class, 'create'])->name('suppliers.create');
+    Route::post('/suppliers/create', [SupplierController::class, 'store'])->name('suppliers.store');
+    Route::get('/suppliers/edit/{hashedId}', [SupplierController::class, 'edit'])->name('suppliers.edit');
+    Route::get('/suppliers/show/{hashedId}', [SupplierController::class, 'show'])->name('suppliers.show');
+    Route::patch('/suppliers/update/{hashedId}', [SupplierController::class, 'update'])->name('suppliers.update');
+
 });
 
 require __DIR__.'/auth.php';

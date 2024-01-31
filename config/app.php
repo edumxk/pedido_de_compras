@@ -185,5 +185,8 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
-    'hashids_salt' => env('HASHIDS_SALT', 'gamification'),
+    'hashids' => [
+        'salt' => env('HASHIDS_SALT', 'gamification'),
+        'length' => env('HASHIDS_LENGTH', 8),
+    ],
 ];

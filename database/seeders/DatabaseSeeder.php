@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             PositionsSeeder::class,
             ProductCategoriesSeeder::class,
             ProductsSeeder::class,
-            SuppliersSeeder::class,
+            ContactsSeeder::class,
         ]);
 
     }

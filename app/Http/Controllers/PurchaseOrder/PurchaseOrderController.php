@@ -43,7 +43,7 @@ class PurchaseOrderController extends Controller
         // Get all departments
         $departments = Department::all();
 
-        return view('purchase_orders.purchase_orders', compact('purchase_orders', 'departments'));
+        return view('purchase_orders.index', compact('purchase_orders', 'departments'));
     }
 
     public function create()
