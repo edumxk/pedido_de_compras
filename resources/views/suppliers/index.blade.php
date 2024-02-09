@@ -38,12 +38,20 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900 dark:text-gray-100">
-                                        {{ $supplier->contacts->first()->name }}
+                                        @if($supplier->contacts->isEmpty())
+                                            <span class="text-red-600 dark:text-red-400">Sem contato</span>
+                                        @else
+                                            {{ $supplier->contacts->first()->name }}
+                                        @endif
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-500 dark:text-gray-400">
-                                        {{ $supplier->contacts->first()->email }}
+                                        @if($supplier->contacts->isEmpty())
+                                            <span class="text-red-600 dark:text-red-400">Sem contato</span>
+                                        @else
+                                            {{ $supplier->contacts->first()->email }}
+                                        @endif
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

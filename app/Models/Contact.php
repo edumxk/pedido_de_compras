@@ -9,10 +9,13 @@ class Contact extends Model
 {
     use HasFactory;
     //as many as contacts can have one supplier
-    public function supplier()
-    {
-        return $this->belongsTo(Supplier::class);
-    }
+
+    public mixed $email;
+    public mixed $call;
+    /**
+     * @var mixed|string
+     */
+    public mixed $adress;
     protected $fillable = [
         'name',
         'email',
@@ -21,14 +24,8 @@ class Contact extends Model
         'supplier_id',
     ];
 
-    public function create(array $data)
+    public function supplier(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return Contact::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'call' => $data['call'],
-            'whatsapp' => $data['whatsapp'],
-            'supplier_id' => $data['supplier_id'],
-        ]);
+        return $this->belongsTo(Supplier::class);
     }
 }

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateSupplierRequest;
+use App\Models\Contact;
 use App\Models\Supplier;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 
@@ -24,6 +26,8 @@ class SupplierController extends Controller
     {
         $supplier = Supplier::find($this->decodeHash($hashedId));
         $supplier->hashedId  = $hashedId;
+        $supplier->address = $this->getAddressByCnpj($supplier->cnpj);
+        \Log::info('Endereço consultado em API: ', ['supplier' => $supplier->address]);
         return view('suppliers.edit', compact('supplier'));
     }
 
@@ -35,19 +39,21 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         dd($request->all());
-        return redirect()->route('suppliers.index');
     }
 
     public function show(string|int $hashedId)
     {
         $supplier = Supplier::find((new Hashids())->decode($hashedId)[0]);
         $supplier->hashedId  = $hashedId;
+        $supplier->address = $this->getAddressByCnpj($supplier->cnpj);
+        \Log::info('Endereço consultado em API: ', ['supplier' => $supplier->address]);
         return view('suppliers.show', compact('supplier'));
     }
 
     public function update(UpdateSupplierRequest $request, string|int $hashedId)
     {
-
+        \DB::enableQueryLog(); // Ativar o log de consultas
+        $contactIds = [];
 
         // Decodificar o hashedId para obter o id real
         $id = $this->decodeHash($hashedId);
@@ -65,11 +71,15 @@ class SupplierController extends Controller
         // Iterar sobre os contatos da requisição
         foreach ($contactsData as $contactData) {
             // Se o id do contato for null ou vazio, criar um novo contato
+
+            \Log::info('Loop contact: '.$contactData['name'] , ['contact' => $contactData]);
+
             if (empty($contactData['id'])) {
                 try {
                     $contactData['supplier_id'] = $supplier->id;
                     $newContact = $supplier->contacts()->create($contactData);
                     \Log::info('New contact created: ', ['contact' => $newContact]);
+                    $contactIds[] = $newContact->id;
                 } catch (\Exception $e) {
                     \Log::error('Error creating contact: ' . $e->getMessage());
                     return response()->json(['error' => 'Error creating contact: ' . $e->getMessage()], 500);
@@ -80,11 +90,14 @@ class SupplierController extends Controller
                 if ($contact) {
                     $contact->update($contactData);
                 }
+                $contactIds[] = $contact->id;
             }
         }
 
-        // Remover os contatos que não estão na requisição
-        $supplier->contacts()->whereNotIn('id', array_column($contactsData, 'id'))->delete();
+        if(count($contactIds) > 0)
+            $supplier->contacts()->whereNotIn('id', $contactIds)->delete();
+
+        \Log::info('SQL Query Log: ', \DB::getQueryLog()); // Registrar o log de consultas
 
         return redirect()->route('suppliers.index');
     }
@@ -104,5 +117,34 @@ class SupplierController extends Controller
             $supplier->delete();
 
         return redirect()->route('suppliers.index');
+    }
+
+    public function getAddressByCnpj(string|int $cnpj)
+    {
+        $cnpj = preg_replace('/[^0-9]/', '', $cnpj);
+        $client = new Client(); //GuzzleHttp\Client
+        $url = "https://www.receitaws.com.br/v1/cnpj/" . $cnpj;
+
+        // outra api para consulta de cnpj  https://brasilapi.com.br/api/cnpj/v1/
+
+        try {
+            $request = $client->get($url);
+            $response = $request->getBody();
+        } catch (\Exception $e) {
+            return 'Endereço não encontrado';
+        }
+
+        $data = json_decode($response, true);
+
+        if(isset($data['status']) && $data['status'] == 'ERROR')
+            return 'Endereço não encontrado';
+
+        $adress = $data['logradouro'] . ', ' . $data['numero'] . ', ' . $data['complemento']. ', ' . $data['bairro'] . ', ' . $data['municipio'] . ' - ' . $data['uf'];
+        $contact = new Contact();
+        $contact->email = $data['email'];
+        $contact->call = $data['telefone'];
+        $contact->adress = $adress;
+
+        return $contact;
     }
 }
