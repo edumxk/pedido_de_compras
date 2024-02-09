@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
-            $table->text('call')->nullable();
-            $table->text('whatsapp')->nullable();
+            $table->string('call', 20)->nullable();
+            $table->string('whatsapp', 20)->nullable();
             $table->foreignId('supplier_id')->constrained('suppliers')->onDelete('cascade');
             $table->timestamps();
         });

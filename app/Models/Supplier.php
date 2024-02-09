@@ -13,6 +13,7 @@ class Supplier extends Model
         'fantasy_name',
         'company_name',
         'cnpj',
+        'address'
     ];
     public function contacts()
     {

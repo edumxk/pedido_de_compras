@@ -66,6 +66,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/suppliers/edit/{hashedId}', [SupplierController::class, 'edit'])->name('suppliers.edit');
     Route::get('/suppliers/show/{hashedId}', [SupplierController::class, 'show'])->name('suppliers.show');
     Route::patch('/suppliers/update/{hashedId}', [SupplierController::class, 'update'])->name('suppliers.update');
+    Route::get('/suppliers/getAll/{cnpj}', [SupplierController::class, 'getAllByCnpj'])->name('suppliers.getAll');
+
+    //product routes
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/products/create', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/edit/{hashedId}', [ProductController::class, 'edit'])->name('products.edit');
+    Route::patch('/products/update/{hashedId}', [ProductController::class, 'update'])->name('products.update');
+    Route::get('/products/show/{hashedId}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('/products/getAll/{name}', [ProductController::class, 'getAllByName'])->name('products.getAll');
+    Route::delete('/products/delete/{hashedId}', [ProductController::class, 'destroy'])->name('products.destroy');
 
 });
 

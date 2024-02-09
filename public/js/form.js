@@ -67,4 +67,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+document.getElementById('cnpj').addEventListener('change', function() {
+    var cnpj = this.value.replace(/[^0-9]/g, '');
+
+    fetch('/suppliers/getAll/' + cnpj)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('fantasy_name').value = data.razao_social;
+            document.getElementById('company_name').value = data.nome_fantasia;
+            document.getElementById('address').value = data.endereco;
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ocorreu um erro ao buscar os dados do fornecedor. Por favor, tente novamente.');
+
+            // Limpar os campos
+            document.getElementById('fantasy_name').value = '';
+            document.getElementById('company_name').value = '';
+            document.getElementById('address').value = '';
+
+        });
+});
+
 console.log('form.js loaded!')

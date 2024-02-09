@@ -19,7 +19,8 @@ class SupplierFactory extends Factory
         return [
             'fantasy_name' => $this->faker->company(),
             'company_name' => $this->faker->company(),
-            'cnpj' => $this->faker->numerify('##.###.###/####-##'),
+            'cnpj' => $this->faker->numerify('##############'),
+            'address' => $this->faker->address(),
             'created_at' => now(),
         ];
     }

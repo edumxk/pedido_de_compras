@@ -28,7 +28,7 @@
 
         <!-- Cadastrar Fornecedor -->
         <div class="flex justify-end">
-            <a href="{{ route('suppliers.create') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            <a href="{{ route('suppliers.index') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                 Novo Fornecedor
             </a>
 

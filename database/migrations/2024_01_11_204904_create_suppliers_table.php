@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('fantasy_name');
             $table->string('company_name');
-            $table->string('cnpj')->nullable();
+            $table->string('cnpj');
+            $table->string('address')->nullable();
             $table->timestamps();
         });
     }
