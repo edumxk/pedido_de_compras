@@ -66,4 +66,11 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Product updated successfully');
     }
 
+    public function destroy(string $hashedId)
+    {
+        $product = Product::find($this->decodeHash($hashedId));
+        $product->delete();
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully');
+    }
+
 }

@@ -14,9 +14,9 @@
                             <p class="mt-2 text-gray-600 dark:text-gray-300">{{ __($purchase_order->user->name) }}</p>
                             <p class="mt-2 text-gray-600 dark:text-gray-300">{{ __($purchase_order->department->name) }}</p>
                             <p class="mt-2 text-gray-600 dark:text-gray-300"> {{ date_format($purchase_order->created_at,'d/m/Y H:i') }}</p>
-                            <a href="{{ route('purchase_orders.show', $purchase_order->id) }}" class="mt-4 inline-block bg-blue-500 text-white rounded px-4 py-2">{{ __('Ver detalhes') }}</a>
+                            <a href="{{ route('purchase_orders.show', $purchase_order->hashedId) }}" class="mt-4 inline-block bg-blue-500 text-white rounded px-4 py-2">{{ __('Ver detalhes') }}</a>
                             @if($status == 'approved')
-                                <a href="{{ route('budgets.index', $purchase_order->id) }}" class="mt-4 inline-block bg-blue-500 text-white rounded px-4 py-2">{{ __('Inserir Orçamento') }}</a>
+                                <a href="{{ route('budgets.index', $purchase_order->hashedId) }}" class="mt-4 inline-block bg-blue-500 text-white rounded px-4 py-2">{{ __('Inserir Orçamento') }}</a>
                             @endif
                         </div>
                     @endforeach

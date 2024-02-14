@@ -40,6 +40,11 @@ class PurchaseOrderController extends Controller
 
         $purchase_orders = $purchase_orders->get();
 
+        $purchase_orders = $purchase_orders->map(function ($purchase_order) {
+            $purchase_order->hashedId = $this->createHash($purchase_order->id);
+            return $purchase_order;
+        });
+
         // Get all departments
         $departments = Department::all();
 
@@ -66,18 +71,19 @@ class PurchaseOrderController extends Controller
         return redirect('/purchase_orders');
     }
 
-    public function show(string|int $id)
+    public function show(string|int $hashedId)
     {
         //get the purchase_order
-        $purchase_order = Purchase_order::findOrFail($id);
+        $purchase_order = Purchase_order::findOrFail($this->decodeHash($hashedId));
+        $purchase_order->hashedId = $this->createHash($purchase_order->id);
         $departments = Department::all();
 
         return view('purchase_orders.show', compact('purchase_order', 'departments'));
     }
 
-    public function update(CreateUpdateOrderRequest $request, string|int $id)
+    public function update(CreateUpdateOrderRequest $request, string|int $hashedId)
     {
-        $purchase_order = Purchase_order::findOrFail($id);
+        $purchase_order = Purchase_order::findOrFail($this->decodeHash($hashedId));
 
         $purchase_order->update([
             'purchase_subject' => $request->purchase_subject,

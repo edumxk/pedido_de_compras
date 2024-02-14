@@ -15,7 +15,7 @@
                 </select>
             </div>
 
-            <input type="text" class="hidden" name="purchase_order_id" value="{{ $id }}" />
+            <input type="text" class="hidden" name="purchase_order_id" value="{{ $hashedId }}" />
 
 
 

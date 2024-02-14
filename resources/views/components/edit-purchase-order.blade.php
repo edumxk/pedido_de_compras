@@ -4,7 +4,7 @@
     @if ($errors->any())
         <x-input-error :messages="$errors->all()"/>
     @endif
-    <form action="{{ route('purchase_orders.update', $purchase_order->id) }}" method="POST" class="space-y-4">
+    <form action="{{ route('purchase_orders.update', $purchase_order->hashedId) }}" method="POST" class="space-y-4">
         @csrf
         <div class="flex flex-col space-y-2">
             <label for="purchase_subject" class="font-bold text-lg">Assunto</label>

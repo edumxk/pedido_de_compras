@@ -48,7 +48,7 @@
                                 <td class="px-6 py-4 whitespace-no-wrap text-right text-sm">
                                     <div class="grid grid-cols-2 gap-2">
                                         <a href="{{ route('products.edit', $product->hashedId) }}" class="text-blue-600 hover:text-blue-900">Editar</a>
-                                        <form action="{{ route('products.destroy', $product) }}" method="POST" class="inline">
+                                        <form action="{{ route('products.destroy', $product->hashedId) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-600 hover:text-red-900">Excluir</button>

@@ -12,26 +12,25 @@ use Illuminate\Http\Request;
 class BudgetController extends Controller
 {
 
-    public function index(string|int $id)
+    public function index(string|int $hashedId)
     {
-        //get a list of all the budgets for the given purchase order
-        $purchase_order = Purchase_order::find($id);
+        $purchase_order = Purchase_order::find($this->decodeHash($hashedId));
+        $purchase_order->hashedId = $hashedId;
         $budgets = $purchase_order->budgets;
         $attachments = $purchase_order->attachments;
         $interactions = $purchase_order->interactions;
 
-        //dd($budgets, $attachments);
         return view('budgets.budgets', compact('budgets', 'purchase_order', 'attachments', 'interactions'));
     }
 
-    public function create(string|int $id)
+    public function create(string|int $hashedId)
     {
-        $categories = Category::all();
-        $products = Product::all();
+        //$categories = Category::all();
+        //$products = Product::all();
         $suppliers = Supplier::all();
-        $prices = Price::find($id);
+        //$prices = Price::find($this->decodeHash($hashedId));
 
-        return view('budgets.create', compact('categories', 'products', 'suppliers', 'prices', 'id'));
+        return view('budgets.create', compact('suppliers', 'hashedId'));
 
     }
 
