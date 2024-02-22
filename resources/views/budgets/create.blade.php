@@ -17,8 +17,6 @@
 
             <input type="text" class="hidden" name="purchase_order_id" value="{{ $hashedId }}" />
 
-
-
             <div class="flex justify-end">
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
                     Criar Orçamento
@@ -31,6 +29,7 @@
             <a href="{{ route('suppliers.index') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                 Novo Fornecedor
             </a>
+        </div>
 
     </div>
 

@@ -124,10 +124,5 @@ class PurchaseOrderController extends Controller
         }else{
             return redirect()->back()->with('message', 'You are not authorized to perform this action');
         }
-
-
     }
-
-
-
 }

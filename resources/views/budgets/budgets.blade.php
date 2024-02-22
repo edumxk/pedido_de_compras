@@ -11,14 +11,15 @@
             <a href="{{ route('budgets.create', $purchase_order->hashedId) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                 Novo Orçamento
             </a>
-        @forelse($budgets as $budget)
-
-        @empty
-            <p class="text-center">Nenhum Orçamento</p>
-        @endforelse
-
+        </div>
+        <div class="flex flex-col mt-4">
+            @forelse($budgets as $budget)
+                <x-budget.card :budget="$budget" />
+            @empty
+                <p class="text-center">Nenhum Orçamento</p>
+            @endforelse
+        </div>
     </div>
-
 
 
 </x-app-layout>

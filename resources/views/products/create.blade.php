@@ -4,6 +4,7 @@
             {{ __('Produtos') }}
         </h2>
     </x-slot>
+    <x-error />
 
     <div class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-6 mx-auto border p-2 rounded-md mt-8 overflow-y-hidden mx-4 sm:w-3/5">
         <p class="text-sm sm:text-base md:text-lg lg:text-xl">Cadastrar Produtos</p>
@@ -12,6 +13,10 @@
         @endif
         <form action="{{ route('products.store') }}" method="POST" class="space-y-4 mx-auto">
             @csrf
+        @if(url()->previous())
+            <input type="hidden" name="previous" value="{{ url()->previous() }}">
+        @endif
+
             <div class="flex flex-col space-y-4">
                 <div class="flex flex-col">
                     <label for="description" class="text-gray-700 dark:text-gray-200">Descrição</label>

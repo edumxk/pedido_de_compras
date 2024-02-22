@@ -11,10 +11,25 @@ class Price extends Model
 
     protected $fillable = [
         'price',
+        'quantity',
         'product_id',
         'supplier_id',
-        'purchase_order_id',
+        'budget_id',
     ];
 
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
+    public function budget()
+    {
+        return $this->belongsTo(Budget::class);
+    }
 
 }

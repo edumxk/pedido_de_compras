@@ -35,6 +35,8 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        $previousUrl = $request->input('previous');
+
         $request->validate([
             'description' => 'required',
             'brand' => 'required',
@@ -45,10 +47,14 @@ class ProductController extends Controller
         try{
             Product::create($request->all());
         } catch (\Exception $e) {
-            return redirect()->route('products.create')->with('error', 'Error creating product');
+            return redirect()->back()->with('error', 'Error creating product');
         }
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully');
+        if(isset($previousUrl)){
+            return redirect($previousUrl)->with('success', 'Product created successfully');
+        }else{
+            return redirect()->route('products.index')->with('success', 'Product created successfully');
+        }
     }
 
     public function edit(string|int $hashedId)

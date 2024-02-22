@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('budgets', function (Blueprint $table) {
             $table->id();
-            $table->integer('budget_number');
             $table->enum('status',['pending','approved','rejected'])->default('pending');
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('payment_id')->constrained('payments');
             $table->foreignId('purchase_order_id')->constrained('purchase_orders');
+            $table->foreignId('supplier_id')->constrained('suppliers');
             $table->timestamps();
         });
     }

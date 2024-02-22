@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('description');
             $table->enum('type',['debito','credito', 'boleto', 'pix', 'dinheiro', 'cheque', 'outros']);
             $table->string('installments');
             $table->string('days');
+            $table->string('discount');
+            $table->string('addition');
+            $table->foreignId('budget_id')->constrained();
             $table->timestamps();
         });
     }

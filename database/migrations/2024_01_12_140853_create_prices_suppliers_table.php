@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('prices_suppliers', function (Blueprint $table) {
             $table->id();
             $table->string('value');
+            $table->string('quantity');
             $table->foreignId('supplier_id')->constrained('suppliers');
             $table->foreignId('product_id')->constrained('products');
             $table->foreignId('budget_id')->constrained('budgets');

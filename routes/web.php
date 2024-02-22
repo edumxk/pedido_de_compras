@@ -3,6 +3,7 @@
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\InteractionController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
@@ -55,9 +56,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/interactions/create', [InteractionController::class, 'store'])->name('interactions.store');
 
     //budget routes
-    Route::get('/budgets/{hashedId}', [BudgetController::class, 'index'])->name('budgets.index');
-    Route::get('/budgets/create/{hashedId}', [BudgetController::class, 'create'])->name('budgets.create');
-    Route::post('/budgets/create', [BudgetController::class, 'store'])->name('budget.create');
+    Route::get('/budgets/{hashedId}', [BudgetController::class, 'index'])->name('budgets.index');//listar
+    Route::get('/budgets/create/{hashedId}', [BudgetController::class, 'show'])->name('budgets.create'); //criar novo
+    Route::post('/budgets/create', [BudgetController::class, 'store'])->name('budget.create'); //salvar novo
+    Route::get('/budgets/products/{hashedId}', [BudgetController::class, 'products'])->name('budgets.products');
+    Route::post('/budgets/products', [BudgetController::class, 'storeProducts'])->name('budgets.storeProducts');
+    Route::get('/budgets/details/{hashedId}', [BudgetController::class, 'details'])->name('budgets.details');
+    Route::post('/budgets/products/delete', [BudgetController::class, 'deleteProduct'])->name('budgets.deleteProduct');
+
 
     //supplier routes
     Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
@@ -77,6 +83,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/show/{hashedId}', [ProductController::class, 'show'])->name('products.show');
     Route::get('/products/getAll/{name}', [ProductController::class, 'getAllByName'])->name('products.getAll');
     Route::delete('/products/delete/{hashedId}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+    //payments routes
+    Route::post('/payments/create', [PaymentController::class, 'store'])->name('payments.store');
 
 });
 
