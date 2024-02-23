@@ -16,9 +16,10 @@ return new class extends Migration
             $table->enum('type',['debito','credito', 'boleto', 'pix', 'dinheiro', 'cheque', 'outros']);
             $table->string('installments');
             $table->string('days');
-            $table->string('discount');
-            $table->string('addition');
-            $table->foreignId('budget_id')->constrained();
+            $table->string('discount')->nullable();
+            $table->string('addition')->nullable();
+            $table->string('payment_id')->nullable();
+            $table->foreignId('budget_id')->constrained('budgets');
             $table->timestamps();
         });
     }

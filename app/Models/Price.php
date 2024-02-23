@@ -32,4 +32,8 @@ class Price extends Model
         return $this->belongsTo(Budget::class);
     }
 
+    public function getTotalPrice(): float
+    {
+        return $price->quantity * $price->price;
+    }
 }

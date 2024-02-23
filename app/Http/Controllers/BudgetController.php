@@ -68,29 +68,32 @@ class BudgetController extends Controller
     public function products(string|int $hashedId)
     {
         $budget = Budget::find($this->decodeHash($hashedId));
+        if ($budget == null) {
+            return redirect()->route('purchase_orders.index')->with('error', 'Budget not found');
+        }
         $products = Product::all();
         $products = $products->map(function ($product) {
             $product->hashedId = $this->createHash($product->id);
             return $product;
         });
+
         $budget->hashedId = $hashedId;
         if($budget->products == null || $budget->products->isEmpty ){
             $budget->products = [];
             return view('budgets.products', compact('budget', 'products'));
         }
+
         $budget->products = $budget->products->map(function ($product) {
             $product->hashedId = $this->createHash($product->id);
             return $product;
         });
-
-
 
         return view('budgets.products', compact('budget', 'products'));
     }
 
     public function storeProducts(addProductRequest $request)
     {
-        //dd($request->all());
+
         $budget = Budget::find($this->decodeHash($request->budget_id));
         $price = [
             'budget_id' => $budget->id,
@@ -110,4 +113,6 @@ class BudgetController extends Controller
         $message = $price->delete();
         return redirect()->route('budgets.products', $request->budget_id)->with('$message', 'Product removed from budget successfully');
     }
+
+
 }

@@ -12,7 +12,6 @@ class Budget extends Model
     protected $fillable = [
         'status',
         'user_id',
-        'payment_id',
         'purchase_order_id',
         'supplier_id',
     ];
@@ -32,7 +31,7 @@ class Budget extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function payment()
+    public function payments()
 
     {
         return $this->hasMany(Payment::class);
@@ -42,4 +41,5 @@ class Budget extends Model
     {
         return $this->hasMany(Price::class);
     }
+
 }

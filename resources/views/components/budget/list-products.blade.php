@@ -40,12 +40,16 @@
                     $total += $product->price * $product->quantity;
                 @endphp
                 @if($loop->last)
+                @php
+                    $budget->total = $total;
+                @endphp
                     <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 text-lg">
                         <th colspan="4" scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Total</th>
-                        <td class="px-6 py-4 text-center">{{ number_format($total,2,',','.') }}</td>
+                        <td class="px-6 py-4 text-center">{{ number_format($budget->total ,2,',','.') }}</td>
                         <td class="px-6 py-4 text-center"></td>
                     </tr>
                 </tbody>
+
             @endif
         @empty
             <tbody>

@@ -63,6 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/budgets/products', [BudgetController::class, 'storeProducts'])->name('budgets.storeProducts');
     Route::get('/budgets/details/{hashedId}', [BudgetController::class, 'details'])->name('budgets.details');
     Route::post('/budgets/products/delete', [BudgetController::class, 'deleteProduct'])->name('budgets.deleteProduct');
+    Route::get('/budget/value/{id}', [BudgetController::class, 'getValue'])->name('budget.value');
 
 
     //supplier routes
@@ -86,6 +87,7 @@ Route::middleware('auth')->group(function () {
 
     //payments routes
     Route::post('/payments/create', [PaymentController::class, 'store'])->name('payments.store');
+    Route::post('/payments/delete', [PaymentController::class, 'delete'])->name('payments.delete');
 
 });
 
