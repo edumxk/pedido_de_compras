@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('discount')->nullable();
             $table->string('addition')->nullable();
             $table->string('payment_id')->nullable();
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->foreignId('user_id')->constrained('users');
             $table->foreignId('budget_id')->constrained('budgets');
             $table->timestamps();
         });

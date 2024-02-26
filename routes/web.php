@@ -64,6 +64,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/budgets/details/{hashedId}', [BudgetController::class, 'details'])->name('budgets.details');
     Route::post('/budgets/products/delete', [BudgetController::class, 'deleteProduct'])->name('budgets.deleteProduct');
     Route::get('/budget/value/{id}', [BudgetController::class, 'getValue'])->name('budget.value');
+    Route::get('/budgets/show/{hashedId}', [BudgetController::class, 'view'])->name('budgets.view');
+    Route::post('/budgets/approve', [BudgetController::class, 'approve'])->name('budgets.approve');
 
 
     //supplier routes

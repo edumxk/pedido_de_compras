@@ -52,15 +52,22 @@ class BudgetController extends Controller
             'purchase_order_id' => 'required',
         ]);
 
+        $purchase_order = Purchase_order::find($this->decodeHash($request->purchase_order_id));
+
         //add userid to the request
         $request->merge([
             'user_id' => auth()->id(),
             'status' => 'pending',
             'payment_id' => null,
-            'purchase_order_id' => $this->decodeHash($request->purchase_order_id),
+            'purchase_order_id' => $purchase_order->id,
         ]);
 
         $budget = Budget::create($request->all());
+
+        if($purchase_order->status == 'approved'){
+            $purchase_order->status = 'budget';
+            $purchase_order->save();
+        }
 
         return redirect()->route('budgets.products', $this->createHash($budget->id) );
     }
@@ -114,5 +121,46 @@ class BudgetController extends Controller
         return redirect()->route('budgets.products', $request->budget_id)->with('$message', 'Product removed from budget successfully');
     }
 
+    public function approve(Request $request)
+    {
+        //if user is not admin, redirect to home
+        if (!auth()->user()->is_admin)
+            return redirect()->back()->with('error', 'You do not have permission to approve budgets');
+        \DB::enableQueryLog(); // Ativar o log de consultas
 
+        $budget = Budget::find($this->decodeHash($request->budget_id));
+        $purchase_order = Purchase_order::find($budget->purchase_order_id);
+        $budget->status = 'approved';
+        $budget->user_id = auth()->id();
+        $purchase_order->status = 'provision';
+
+        //inicia transação db e dar rollback caso tenha erros
+        \DB::beginTransaction();
+
+        foreach ($purchase_order->budgets as $budget) {
+            if($request->budget_id == $budget->id)
+                $budget->status = 'approved';
+            else
+                $budget->status = 'rejected';
+            $budget->save();
+        }
+
+        foreach ($budget->payments as $payment) {
+            if($request->payment_id == $payment->id)
+                $payment->status = 'approved';
+            else
+                $payment->status = 'rejected';
+            $payment->save();
+        }
+        try {
+            $budget->save();
+            $purchase_order->save();
+            \DB::commit();
+        } catch (\Exception $e) {
+            \DB::rollback();
+            return redirect()->back()->with('error', 'Error approving budget');
+        }
+
+        return redirect()->back()->with('message', 'Budget approved successfully');
+    }
 }

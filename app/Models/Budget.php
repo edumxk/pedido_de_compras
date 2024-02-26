@@ -42,4 +42,28 @@ class Budget extends Model
         return $this->hasMany(Price::class);
     }
 
+    public function getTotal()
+    {
+        $total = 0;
+        if($this->prices->isEmpty()){
+            return 1;
+        }
+
+        foreach ($this->prices as $price) {
+            $total += $price->price * $price->quantity;
+        }
+
+        return $total;
+    }
+
+    public function showRangePrice(array $range): string
+    {
+        $menorValor = min($range);
+        $maiorValor = max($range);
+
+        return "R$ " . number_format($menorValor, 2, ',', '.') . " - R$ " . number_format($maiorValor, 2, ',', '.');
+    }
+
+
+
 }

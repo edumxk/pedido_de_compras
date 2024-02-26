@@ -13,6 +13,7 @@ class PaymentController extends Controller
         $request->merge([
             'budget_id' => $this->decodeHash($request->budget_id),
             'days' => str_replace(' ', '', $request->days),
+            'user_id' => auth()->id(),
         ]);
 
 
@@ -44,12 +45,4 @@ class PaymentController extends Controller
         return redirect()->back()->with('success', 'Payment deleted successfully');
     }
 
-    public function getValue($id)
-    {
-        $payment = Payment::find($id);
-
-
-        return response()->json($payment);
-
-    }
 }

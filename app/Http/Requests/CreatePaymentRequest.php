@@ -28,7 +28,6 @@ class CreatePaymentRequest extends FormRequest
             'type' => 'required|in:boleto,credito,debito,pix,cheque,outros,dinheiro',
             'installments' => 'required|numeric|min:1|max:420',
             'days' => ['required', new IncreasingNumbers],
-            'discount' => 'numeric',
         ];
     }
 }

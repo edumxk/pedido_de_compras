@@ -10,9 +10,19 @@
         <strong class="font-bold">Reprovado!</strong>
         <span class="block sm:inline">Esta ordem de compra foi reprovada.</span>
     </div>
-@else
+@elseif($purchase_order->status == 'opened')
     <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
         <strong class="font-bold">Pendente!</strong>
         <span class="block sm:inline">Esta ordem de compra está pendente de aprovação.</span>
+    </div>
+@elseif($purchase_order->status == 'budget')
+    <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Em orçamento!</strong>
+        <span class="block sm:inline">Esta ordem com orçamento pendente de aprovação.</span>
+    </div>
+@elseif($purchase_order->status == 'provision')
+    <div class="bg-blue-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Em Provisão!</strong>
+        <span class="block sm:inline">Esta ordem de compra ainda não foi provisionada.</span>
     </div>
 @endif

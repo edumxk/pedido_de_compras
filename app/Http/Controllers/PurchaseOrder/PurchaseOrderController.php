@@ -9,7 +9,6 @@ use App\Models\Purchase_order;
 use Illuminate\Http\Request;
 use App\Models\Department;
 use App\Models\Position;
-use Illuminate\Support\Facades\Auth;
 
 class PurchaseOrderController extends Controller
 {
@@ -77,6 +76,11 @@ class PurchaseOrderController extends Controller
         $purchase_order = Purchase_order::findOrFail($this->decodeHash($hashedId));
         $purchase_order->hashedId = $this->createHash($purchase_order->id);
         $departments = Department::all();
+
+        $purchase_order->budgets = $purchase_order->budgets->map(function ($budget) {
+            $budget->hashedId = $this->createHash($budget->id);
+            return $budget;
+        });
 
         return view('purchase_orders.show', compact('purchase_order', 'departments'));
     }
