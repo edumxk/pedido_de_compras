@@ -6,6 +6,7 @@ use App\Http\Controllers\InteractionController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProvisionController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -90,6 +91,9 @@ Route::middleware('auth')->group(function () {
     //payments routes
     Route::post('/payments/create', [PaymentController::class, 'store'])->name('payments.store');
     Route::post('/payments/delete', [PaymentController::class, 'delete'])->name('payments.delete');
+
+    //provision routes
+    Route::post('/provisions/create', [ProvisionController::class, 'store'])->name('provisions.store');
 
 });
 

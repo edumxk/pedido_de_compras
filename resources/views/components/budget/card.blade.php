@@ -19,6 +19,19 @@
                     <a href="{{ route('budgets.products', $budget->hashedId) }}" class="text-sm text-gray-900 dark:text-gray-200">
                         {{ $budget->supplier->fantasy_name }}
                     </a>
+                    @if($budget->status == 'approved')
+                        <span class="bg-green-500 text-white font-bold py-2 px-4 rounded">
+                            Aprovado
+                        </span>
+                    @elseif($budget->status == 'rejected')
+                        <span class="bg-red-500 text-white font-bold py-2 px-4 rounded">
+                            Reprovado
+                        </span>
+                    @else
+                        <span class="bg-yellow-500 text-white font-bold py-2 px-4 rounded">
+                            Pendente
+                        </span>
+                    @endif
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap block sm:table-cell">
                     <div class="text-sm text-gray-900 dark:text-gray-200">
@@ -84,6 +97,15 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900 dark:text-gray-200">
+                                            @if($payment->status == 'approved')
+                                                <span class="bg-green-500 text-white font-bold py-2 px-4 rounded">
+                                                    Aprovado
+                                                </span>
+                                            @elseif($payment->status == 'rejected')
+                                                <span class="bg-red-500 text-white font-bold py-2 px-4 rounded">
+                                                    Reprovado
+                                                </span>
+                                            @else
                                             <form action="{{ route('budgets.approve') }}" method="POST">
                                                 @csrf
                                                 <input type="hidden" name="budget_id" value="{{ $budget->hashedId }}" />
@@ -92,6 +114,7 @@
                                                     Aprovar
                                                 </button>
                                             </form>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

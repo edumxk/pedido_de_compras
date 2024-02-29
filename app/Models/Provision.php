@@ -5,23 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Interaction extends Model
+class Provision extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'body',
-        'user_id',
         'purchase_order_id',
+        'user_id',
+        'interaction_id',
+        'description',
+        'status',
     ];
 
-    public static function create(array $array)
-    {
-        //save the interaction
-        $interaction = static::query()->create($array);
-    }
-
-    public function purchaseOrder()
+    public function purchase_order()
     {
         return $this->belongsTo(Purchase_order::class);
     }
@@ -31,10 +27,9 @@ class Interaction extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function attachments()
+    public function interaction()
     {
-        return $this->hasMany(Attachment::class);
+        return $this->belongsTo(Interaction::class);
     }
-
 
 }

@@ -82,6 +82,18 @@ class PurchaseOrderController extends Controller
             return $budget;
         });
 
+        try{
+            //check if payments is not empty
+            if($purchase_order->budgets()->where('status', 'approved')->get()->isEmpty() && $purchase_order->status == 'provision'){
+                \Log::info('Budget not approved in purchase order: '. $purchase_order->id . ' status: '. $purchase_order->status);
+                return back()->with('error', 'Orçamento: ' .$purchase_order->id. ' não aprovado, status: ' .$purchase_order->status. '. Envie esse erro ao T.I.');
+            }
+
+        }catch (\Exception $e){
+            \Log::info('error interaction: '. $e->getMessage());
+            return back()->with('error', 'Error creating interaction');
+        }
+
         return view('purchase_orders.show', compact('purchase_order', 'departments'));
     }
 
@@ -116,11 +128,20 @@ class PurchaseOrderController extends Controller
                 'body' =>  $message,
                 'user_id' => auth()->id(),
             ]);
+
             //update the purchase_order status
             $purchase_order = Purchase_order::findOrFail($request->purchase_order_id);
+
             $purchase_order->update([
                 'status' => $request->status,
             ]);
+
+            try {
+                $this->sendEmail($purchase_order, $purchase_order->interactions->last()->id);
+            }catch (\Exception $e){
+                \Log::info('error send email: '. $e->getMessage());
+                return back()->with('error', 'Error sending email');
+            }
 
             //refresh the page with message success or error
             return redirect()->back()->with('message', 'Purchase Order ' .$request->status. ' Successfully');

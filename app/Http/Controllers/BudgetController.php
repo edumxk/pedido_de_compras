@@ -138,7 +138,7 @@ class BudgetController extends Controller
         \DB::beginTransaction();
 
         foreach ($purchase_order->budgets as $budget) {
-            if($request->budget_id == $budget->id)
+            if($request->budget_id == $this->createHash($budget->id))
                 $budget->status = 'approved';
             else
                 $budget->status = 'rejected';
