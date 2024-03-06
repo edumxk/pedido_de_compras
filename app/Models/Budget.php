@@ -58,8 +58,19 @@ class Budget extends Model
 
     public function showRangePrice(array $range): string
     {
-        $menorValor = min($range);
-        $maiorValor = max($range);
+        if (empty($range)) {
+            return "R$ 0,00";
+        }
+        if(count($range) == 1)
+            return "R$ " . number_format($range[0], 2, ',', '.') ;
+
+        try {
+            $menorValor = min($range);
+            $maiorValor = max($range);
+        } catch (\Exception $e) {
+            \Log::info('Erro ao calcular valores: ', ['error' => $e->getMessage()]);
+            return "R$ 0,00";
+        }
 
         return "R$ " . number_format($menorValor, 2, ',', '.') . " - R$ " . number_format($maiorValor, 2, ',', '.');
     }

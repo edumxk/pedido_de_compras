@@ -23,12 +23,10 @@ use App\Http\Controllers\PurchaseOrder\PurchaseOrderController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -67,6 +65,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/budget/value/{id}', [BudgetController::class, 'getValue'])->name('budget.value');
     Route::get('/budgets/show/{hashedId}', [BudgetController::class, 'view'])->name('budgets.view');
     Route::post('/budgets/approve', [BudgetController::class, 'approve'])->name('budgets.approve');
+    Route::post('/budgets/cancelApprove', [BudgetController::class, 'cancelApprove'])->name('budgets.reprove');
 
 
     //supplier routes
@@ -94,7 +93,18 @@ Route::middleware('auth')->group(function () {
 
     //provision routes
     Route::post('/provisions/create', [ProvisionController::class, 'store'])->name('provisions.store');
+    Route::post('/provisions/buy', [ProvisionController::class, 'buy'])->name('provisions.buy');
+    Route::post('/provisions/received', [ProvisionController::class, 'received'])->name('provisions.received');
 
+
+    Route::post('/set-dark-mode', [HomeController::class, 'setDarkMode'])->name('set-dark-mode');
+});
+
+//grupo de rotas para o middleware de autenticação is_admin
+Route::middleware(['auth'])->whereIn('is_admin', [1])->group(function () {
+    Route::get('/admin', function () {
+        return view('home');
+    })->name('admin');
 });
 
 require __DIR__.'/auth.php';

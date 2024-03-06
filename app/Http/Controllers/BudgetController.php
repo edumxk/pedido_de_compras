@@ -10,12 +10,14 @@ use App\Models\Product;
 use App\Models\Purchase_order;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BudgetController extends Controller
 {
 
     public function index(string|int $hashedId)
     {
+
         $purchase_order = Purchase_order::find($this->decodeHash($hashedId));
         $purchase_order->hashedId = $hashedId;
         $budgets = $purchase_order->budgets;
@@ -34,6 +36,8 @@ class BudgetController extends Controller
 
     public function show(string|int $hashedId)
     {
+        if(Auth::user()->is_buyer==false)
+            return redirect()->back()->with('error', 'Você não tem permissão para criar orçamentos');
         //$categories = Category::all();
         //$products = Product::all();
         $suppliers = Supplier::all();
@@ -45,7 +49,8 @@ class BudgetController extends Controller
 
     public function store(Request $request)
     {
-
+        if(!Auth::user()->is_buyer)
+            return redirect()->back()->with('error', 'Você não tem permissão para criar orçamentos');
 
         $request->validate([
             'supplier_id' => 'required',
@@ -74,6 +79,9 @@ class BudgetController extends Controller
 
     public function products(string|int $hashedId)
     {
+        if(!Auth::user()->is_buyer)
+            return redirect()->back()->with('error', 'Você não tem permissão para editar orçamentos');
+
         $budget = Budget::find($this->decodeHash($hashedId));
         if ($budget == null) {
             return redirect()->route('purchase_orders.index')->with('error', 'Budget not found');
@@ -125,42 +133,99 @@ class BudgetController extends Controller
     {
         //if user is not admin, redirect to home
         if (!auth()->user()->is_admin)
-            return redirect()->back()->with('error', 'You do not have permission to approve budgets');
+            return redirect()->back()->with('error', 'Você não tem permissão para aprovar orçamentos');
+
         \DB::enableQueryLog(); // Ativar o log de consultas
-
-        $budget = Budget::find($this->decodeHash($request->budget_id));
-        $purchase_order = Purchase_order::find($budget->purchase_order_id);
-        $budget->status = 'approved';
-        $budget->user_id = auth()->id();
-        $purchase_order->status = 'provision';
-
-        //inicia transação db e dar rollback caso tenha erros
         \DB::beginTransaction();
-
-        foreach ($purchase_order->budgets as $budget) {
-            if($request->budget_id == $this->createHash($budget->id))
-                $budget->status = 'approved';
-            else
-                $budget->status = 'rejected';
-            $budget->save();
-        }
-
-        foreach ($budget->payments as $payment) {
-            if($request->payment_id == $payment->id)
-                $payment->status = 'approved';
-            else
-                $payment->status = 'rejected';
-            $payment->save();
-        }
         try {
-            $budget->save();
-            $purchase_order->save();
+            $budget = Budget::find($this->decodeHash($request->budget_id));
+            $purchase_order = Purchase_order::find($budget->purchase_order_id);
+            $budget->status = 'approved';
+            $budget->user_id = auth()->id();
+            $purchase_order->status = 'provision';
+            \Log::info('Salvando Status: '. $purchase_order->save());
+            //inicia transação db e dar rollback caso tenha erros
+
+            foreach ($purchase_order->budgets as $budget) {
+                if($request->budget_id == $this->createHash($budget->id))
+                    $budget->status = 'approved';
+                else
+                    $budget->status = 'rejected';
+                $budget->save();
+                \Log::info('Salvando Status do Orçamento: '.$budget->status . '|budget_id: '.$budget->id);
+
+                foreach ($budget->payments as $payment) {
+                    if($request->payment_id == $payment->id){
+                        $payment->status = 'approved';
+                        $payment->save();
+                        \log::info('pagamentos alterados: '.$payment->status . '|payment_id: '.$payment->id);
+                    }
+                    else {
+                        $payment->status = 'rejected';
+                        $payment->save();
+                        \log::info('pagamentos alterados: '.$payment->status . '|payment_id: '.$payment->id);
+                    }
+                    \log::info('pagamentos alterados: '.$payment->status);
+                }
+            }
             \DB::commit();
         } catch (\Exception $e) {
             \DB::rollback();
             return redirect()->back()->with('error', 'Error approving budget');
         }
 
-        return redirect()->back()->with('message', 'Budget approved successfully');
+        //create a interaction of the approval
+        $interaction = $purchase_order->interactions()->create([
+            'user_id' => auth()->id(),
+            'body' => 'Orçamento aprovado! Liberado para Compra.',
+        ]);
+        //send email to all in the purchase order
+        $this->sendEmail( $purchase_order, $interaction->id );
+
+        return redirect()->back()->with('message', 'Orçamento aprovado com sucesso');
+    }
+
+    public function cancelApprove(Request $request)
+    {
+        //if user is not admin, redirect to home
+        if (!auth()->user()->is_admin)
+            return redirect()->back()->with('error', 'Você não tem permissão para cancelar aprovação de orçamentos');
+
+        try {
+            \DB::enableQueryLog(); // Ativar o log de consultas
+            \DB::beginTransaction();
+            $purchase_order = Purchase_order::find($this->decodeHash($request->purchase_order_id));
+            $purchase_order->status = 'budget';
+            \Log::info('Salvando Status: ' . $purchase_order->save());
+            //inicia transação db e dar rollback caso tenha erros
+
+            foreach ($purchase_order->budgets as $budget) {
+                    $budget->status = 'pending';
+                $budget->save();
+                \Log::info('Salvando Status do Orçamento: ' . $budget->status . '|budget_id: ' . $budget->id);
+
+                foreach ($budget->payments as $payment) {
+                    $payment->status = 'pending';
+                    $payment->save();
+                    \log::info('pagamentos alterados: ' . $payment->status . '|payment_id: ' . $payment->id);
+                }
+            }
+            \DB::commit();
+        } catch (\Exception $e) {
+            \DB::rollback();
+            return redirect()->back()->with('error', 'Error canceling budget approval');
+        }
+
+        //create a interaction of the approval
+        $interaction = $purchase_order->interactions()->create([
+            'user_id' => auth()->id(),
+            'body' => 'Aprovação do orçamento cancelada. Verificar com o administrador.',
+        ]);
+
+        //send email to all in the purchase order
+        $this->sendEmail( $purchase_order, $interaction->id );
+
+
+        return redirect()->back()->with('message', 'Aprovação do orçamento cancelada com sucesso');
     }
 }

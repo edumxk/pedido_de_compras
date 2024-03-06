@@ -43,28 +43,6 @@
             <x-input-error class="mt-2" :messages="$errors->get('is_active')" />
         </div>
 
-        <!-- Position -->
-        <div>
-            <x-input-label for="position" :value="__('Position')" />
-            <x-text-input id="position" name="position" type="text" class="mt-1 block w-full" :value="old('position', $user->position->name)" required autofocus autocomplete="position" />
-            <x-input-error class="mt-2" :messages="$errors->get('position')" />
-        </div>
-
-        <!-- Departaments -->
-        <div>
-            <x-input-label for="departaments" :value="__('Departaments')" />
-            <x-text-input id="departaments" name="departaments" type="text" class="mt-1 block w-full" :value="old('departaments', $user->position->department->name)" required autofocus autocomplete="departaments" />
-            <x-input-error class="mt-2" :messages="$errors->get('departaments')" />
-        </div>
-
-        <!--<div>
-            <x-input-label for="is_active" :value="__('Is Active')" />
-            <x-toggle-button label-true="Ativado" checked="{{ $user->is_active }}" label-false="Desativado" >
-            </x-toggle-button>
-            <x-text-input id="is_active" name="is_active" type="text" class="mt-1 block w-full" :value="old('is_active', $user->is_active)" autocomplete="is_active" />
-            <x-input-error class="mt-2" :messages="$errors->get('is_active')" />
-        </div> -->
-
         <!--  -->
 
         <div>

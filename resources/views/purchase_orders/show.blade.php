@@ -32,7 +32,16 @@
                 @empty
                     <p class="text-center dark:text-gray-200">Nenhum Orçamento</p>
                 @endforelse
-                <a class="mt-4 inline-block bg-blue-500 text-white rounded px-4 py-2 ml-2" href="{{ route('budgets.create', $purchase_order->hashedId ) }}">{{ __('Inserir Orçamento') }}</a>
+                @if($purchase_order->status == 'budget' && Auth::user()->is_buyer)
+                    <a class="mt-4 inline-block bg-green-500 text-white rounded px-4 py-2 ml-2" href="{{ route('budgets.create', $purchase_order->hashedId ) }}">{{ __('Inserir Orçamento') }}</a>
+                @endif
+                @if($purchase_order->budgets->first() && $purchase_order->status == 'provision' && Auth::user()->is_admin == 1)
+                    <form action="{{ route('budgets.reprove') }}" class="flex" method="post" >
+                        @csrf
+                        <input type="hidden" name="purchase_order_id" value="{{ $purchase_order->hashedId }}">
+                        <button class="mt-4 inline-block bg-red-500 text-white rounded px-4 py-2 ml-2" type="submit">{{ __('Reprovar Orçamento') }}</button>
+                    </form>
+                @endif
             </div>
 
         </div>
@@ -45,6 +54,10 @@
 
         @if($purchase_order->status == 'opened')
             <x-approver :purchase_order="$purchase_order"/>
+        @endif
+
+        @if($purchase_order->status == 'purchase' && (Auth::user()->is_buyer || Auth::user()->id == $purchase_order->user_id))
+            <x-provision.buy :purchase_order="$purchase_order"/>
         @endif
 
     </div>
