@@ -1,19 +1,17 @@
 <x-app-layout>
+
     <div class="bg-white dark:bg-gray-800 p-6">
+        <x-auth-session-status class="mb-4" :status="session('status')" />
         <x-input-error/>
         <x-error/>
-
         <x-status-order :purchase_order="$purchase_order"/>
 
-        <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
             <h1 class="text-center text-3xl font-bold text-gray-900 dark:text-gray-200">Detalhes da Ordem de Compra</h1>
         </div>
-
-        <div class="grid grid-cols-1 gap-12">
-
-            <div class="p-6 bg-white dark:bg-gray-800 shadow rounded-lg">
-                <h2 class="text-xl font-bold text-gray-900 dark:text-gray-200">Informações da Ordem de Compra</h2>
-                @if($purchase_order->status == 'opened' )
+        <div class="grid grid-cols-1 gap-8">
+            <div class="px-6 bg-white dark:bg-gray-800 shadow rounded-lg">
+                @if($purchase_order->status == 'opened' && Auth::user()->id == $purchase_order->user_id)
                     <x-edit-purchase-order :purchase_order="$purchase_order" :departments="$departments"/>
                 @else
                     <x-show-purchase-order :purchase_order="$purchase_order" :departments="$departments"/>
@@ -21,12 +19,13 @@
             </div>
 
             <div class="p-6 bg-white dark:bg-gray-800 shadow rounded-lg">
-                <h2 class="text-xl font-bold text-gray-900 dark:text-gray-200">Interactions</h2>
                 <x-interaction-show :purchase_order="$purchase_order"></x-interaction-show>
             </div>
-
+            @if($purchase_order->status != 'finished')
+                <x-interaction-create :purchase_order="$purchase_order"/>
+            @endif
             <div class="p-6 bg-white dark:bg-gray-800 shadow rounded-lg">
-                <h2 class="text-xl font-bold text-gray-900 dark:text-gray-200">Orçamentos</h2>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-200 text-center">Orçamentos</h2>
                 @forelse($purchase_order->budgets as $budget)
                     <x-budget.card :budget="$budget"/>
                 @empty
@@ -43,22 +42,25 @@
                     </form>
                 @endif
             </div>
+            @if($purchase_order->status == 'provision' && Auth::user()->is_financial == 0 )
+                <x-provision.index :purchase_order="$purchase_order"/>
+            @endif
+
+
+            @if($purchase_order->status == 'opened' && Auth::user()->is_admin)
+                <x-approver :purchase_order="$purchase_order"/>
+            @endif
+
+            @if($purchase_order->status == 'purchase' && (Auth::user()->is_buyer || Auth::user()->id == $purchase_order->user_id))
+                <x-provision.buy :purchase_order="$purchase_order"/>
+            @endif
+
+            @if($purchase_order->status == 'received' && (Auth::user()->is_buyer || Auth::user()->id == $purchase_order->user_id))
+                <x-provision.finish :purchase_order="$purchase_order"/>
+            @endif
 
         </div>
 
-        @if($purchase_order->status == 'provision' && Auth::user()->is_financial == 0 )
-            <x-provision.index :purchase_order="$purchase_order"/>
-        @endif
-
-        <x-interaction-create :purchase_order="$purchase_order"/>
-
-        @if($purchase_order->status == 'opened')
-            <x-approver :purchase_order="$purchase_order"/>
-        @endif
-
-        @if($purchase_order->status == 'purchase' && (Auth::user()->is_buyer || Auth::user()->id == $purchase_order->user_id))
-            <x-provision.buy :purchase_order="$purchase_order"/>
-        @endif
 
     </div>
 </x-app-layout>

@@ -1,4 +1,6 @@
 <x-app-layout>
+    <x-error/>
+    <x-input-error/>
     <div class="flex flex-col overflow-hidden">
         <div class="-my-2">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -63,9 +65,14 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="{{ route('suppliers.edit', $supplier->hashedId) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-200">Edit</a>
-                                    <a href="#" class="ml-4 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-200">Delete</a>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="{{ route('suppliers.edit', $supplier->hashedId) }}" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-200">Edit</a>
+                                        <form action="{{ route('suppliers.delete', $supplier->hashedId) }}" method="get" onsubmit="return confirm('Tem certeza que deseja excluir este fornecedor?');">
+                                            @csrf
+                                            <button type="submit" class="ml-4 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-200 pointer" value="Delete">Excluir</button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

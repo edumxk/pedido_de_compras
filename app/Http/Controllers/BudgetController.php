@@ -36,7 +36,7 @@ class BudgetController extends Controller
 
     public function show(string|int $hashedId)
     {
-        if(Auth::user()->is_buyer==false)
+        if(!Auth::user()->is_buyer)
             return redirect()->back()->with('error', 'Você não tem permissão para criar orçamentos');
         //$categories = Category::all();
         //$products = Product::all();
@@ -79,13 +79,17 @@ class BudgetController extends Controller
 
     public function products(string|int $hashedId)
     {
-        if(!Auth::user()->is_buyer)
+        if(!Auth::user()->is_buyer )
             return redirect()->back()->with('error', 'Você não tem permissão para editar orçamentos');
 
         $budget = Budget::find($this->decodeHash($hashedId));
-        if ($budget == null) {
-            return redirect()->route('purchase_orders.index')->with('error', 'Budget not found');
-        }
+        if ($budget == null)
+            return redirect()->route('purchase_orders.index')->with('error', 'Orçamento não encontrado');
+
+
+        if($budget->status != 'pending')
+            return redirect()->back()->with('error', 'Não é permitido alterar um orçamento já aprovado');
+
         $products = Product::all();
         $products = $products->map(function ($product) {
             $product->hashedId = $this->createHash($product->id);

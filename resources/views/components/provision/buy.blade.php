@@ -10,7 +10,7 @@
 @endphp
 <div class="dark:bg-gray-800 mx-auto p-6 bg-white rounded shadow-md dark:bg-gray-700">
     <div class="mb-4">
-        <h1 class="text-4xl font-bold mb-5 text-gray-900 dark:text-white text-center">Confirmação de Compra Realizada</h1>
+        <h1 class="text-4xl font-bold mb-5 text-gray-900 dark:text-white text-center">Confirmar Compra</h1>
         <x-provision.products :budget="$purchase_order->budgets->where('status', 'approved')->first()"/>
     </div>
     <form class="mx-auto max-w-xl p-6 bg-white rounded shadow-md dark:bg-gray-700" method="POST" action="{{ route('provisions.buy') }}">

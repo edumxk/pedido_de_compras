@@ -1,4 +1,6 @@
 <x-app-layout>
+    <x-input-error/>
+    <x-error/>
     <div class="flex flex-col items-center justify-center min-h-screen dark:bg-gray-800 dark:text-gray-200 bg-gray-100 py-2">
         <div class="text-center">
             <h1 class="text-4xl font-bold dark:text-gray-100 text-gray-900 mb-6">Bem Vindo a intranet</h1>

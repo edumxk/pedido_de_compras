@@ -7,12 +7,16 @@ use App\Models\Contact;
 use App\Models\Supplier;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class SupplierController extends Controller
 {
     public function index()
     {
+        if(!Auth::user()->is_buyer)
+            return redirect()->back()->with('error', 'Você não tem permissão para acessar fornecedores');
+
         $suppliers = Supplier::all();
         $suppliers = $suppliers->map(function ($supplier) {
             $supplier->hashedId = $this->createHash($supplier->id);
@@ -23,7 +27,11 @@ class SupplierController extends Controller
     }
 
     public function edit(string|int $hashedId)
+
     {
+        if(!Auth::user()->is_buyer)
+            return redirect()->back()->with('error', 'Você não tem permissão para editar fornecedores');
+
         $supplier = Supplier::find($this->decodeHash($hashedId));
         $supplier->hashedId  = $hashedId;
 
@@ -32,11 +40,16 @@ class SupplierController extends Controller
 
     public function create()
     {
+        if(!Auth::user()->is_buyer)
+            return redirect()->back()->with('error', 'Você não tem permissão para criar fornecedores');
         return view('suppliers.create');
     }
 
     public function store(Request $request)
     {
+        if(!Auth::user()->is_buyer)
+            return redirect()->back()->with('error', 'Você não tem permissão para criar fornecedores');
+
         $this->validate($request, [
             'cnpj' => 'required|unique:suppliers,cnpj|min:14|max:14',
             'fantasy_name' => 'required|min:6|max:255',
@@ -68,6 +81,9 @@ class SupplierController extends Controller
 
     public function show(string|int $hashedId)
     {
+        if(!Auth::user()->is_buyer)
+            return redirect()->back()->with('error', 'Você não tem permissão para acessar fornecedores');
+
         $supplier = Supplier::find((new Hashids())->decode($hashedId)[0]);
         $supplier->hashedId  = $hashedId;
         return view('suppliers.show', compact('supplier'));
@@ -125,21 +141,20 @@ class SupplierController extends Controller
         return redirect()->route('suppliers.index');
     }
 
-    public function destroy(Request $request)
+    public function delete(string $hashedId)
     {
-        $this->validate($request, [
-            'id' => 'required|exists:suppliers,id|integer'
-        ]);
 
+        if(!Auth::user()->is_buyer)
+            return redirect()->back()->with('error', 'Você não tem permissão para excluir fornecedores');
 
-        $supplier = Supplier::find($request->id);
+        $supplier = Supplier::find($this->decodeHash($hashedId));
 
-        if(!$supplier || $supplier->purchaseOrders->count() > 0)
-            return redirect()->route('suppliers.index');
+        if(!$supplier || $supplier->budgets->count() > 0)
+            return redirect()->route('suppliers.index')->with('error', 'Este fornecedor está em um pedido de compra e não pode ser excluido');
         else
-            $supplier->delete();
+            $supplierReturn = $supplier->delete();
 
-        return redirect()->route('suppliers.index');
+        return redirect()->route('suppliers.index')->with('success', 'Forncedor: '. $supplier->fantasy_name . ' excluído com sucesso');
     }
 
     public function getAddressByCnpj(string|int $cnpj)
