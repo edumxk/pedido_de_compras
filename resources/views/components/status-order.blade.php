@@ -25,4 +25,19 @@
         <strong class="font-bold">Em Provisão!</strong>
         <span class="block sm:inline">Esta ordem de compra ainda não foi provisionada.</span>
     </div>
+@elseif($purchase_order->status == 'purchase')
+    <div class="bg-blue-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Em Compra!</strong>
+        <span class="block sm:inline">Esta ordem de compra ainda não foi comprada.</span>
+    </div>
+@elseif($purchase_order->status == 'received')
+    <div class="bg-blue-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Em Recebimento!</strong>
+        <span class="block sm:inline">Esta ordem de compra está aguardando o recebimento.</span>
+    </div>
+@elseif($purchase_order->status == 'finished')
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Finalizado!</strong>
+        <span class="block sm:inline">Esta ordem de compra já foi finalizada.</span>
+    </div>
 @endif

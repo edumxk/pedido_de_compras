@@ -1,4 +1,6 @@
 <x-app-layout>
+
+
     <x-slot name="header">
         <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 leading-tight mb-2">
             {{ __('Produtos') }}
@@ -8,9 +10,8 @@
         <a href="{{ route('products.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">Cadastrar Produto</a>
     </div>
     </x-slot>
-
-    <x-message />
-
+    <x-input-error/>
+    <x-error/>
     <div class="flex flex-col">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -44,7 +45,7 @@
                                 <td class="px-6 py-4 whitespace-no-wrap text-right text-sm">
                                     <div class="grid grid-cols-2 gap-2">
                                         <a href="{{ route('products.edit', $product->hashedId) }}" class="text-blue-600 hover:text-blue-900">Editar</a>
-                                        <form action="{{ route('products.destroy', $product->hashedId) }}" method="POST" class="inline">
+                                        <form action="{{ route('products.destroy', $product->hashedId) }}" method="POST" class="inline" onsubmit="return confirm('Tem certeza que deseja excluir este produto?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-600 hover:text-red-900">Excluir</button>

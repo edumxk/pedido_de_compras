@@ -1,4 +1,6 @@
 <div class="grid place-items-center dark:bg-gray-800 dark:text-white">
+    <x-input-error/>
+    <x-error/>
     <form method="POST" action="{{ route('budgets.storeProducts') }}" class="w-full max-w-md">
         @csrf
         <input type="hidden" name="budget_id" value="{{ $budget->hashedId }}">
