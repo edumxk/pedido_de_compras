@@ -19,4 +19,9 @@ class Supplier extends Model
     {
         return $this->hasMany(Contact::class);
     }
+
+    public function budgets()
+    {
+        return $this->hasMany(Budget::class);
+    }
 }

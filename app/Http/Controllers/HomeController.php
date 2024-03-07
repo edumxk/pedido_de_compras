@@ -15,10 +15,10 @@ class HomeController extends Controller
     {
         if( session('dark_mode') !== $request->session()->get('dark_mode') ){
             $request->session()->put('dark_mode', $request->input('dark_mode'));
-            return response()->json(['success' => true], 200);
+            return response()->json(['success' => true], 201);
         }else
             $request->session()->put('dark_mode', $request->input('dark_mode'));
-        return response()->json(['error' => 'Not Found'], 404);
+        return response()->json(['success' => true], 200);
     }
 
 }

@@ -29,6 +29,8 @@ Route::get('/dashboard', function () {
     return view('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::post('/set-dark-mode', [HomeController::class, 'setDarkMode'])->name('set-dark-mode');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -74,6 +76,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/suppliers/create', [SupplierController::class, 'store'])->name('suppliers.store');
     Route::get('/suppliers/edit/{hashedId}', [SupplierController::class, 'edit'])->name('suppliers.edit');
     Route::get('/suppliers/show/{hashedId}', [SupplierController::class, 'show'])->name('suppliers.show');
+    Route::get('/suppliers/delete/{hashedId}', [SupplierController::class, 'delete'])->name('suppliers.delete');
     Route::patch('/suppliers/update/{hashedId}', [SupplierController::class, 'update'])->name('suppliers.update');
     Route::get('/suppliers/getAll/{cnpj}', [SupplierController::class, 'getAllByCnpj'])->name('suppliers.getAll');
 
@@ -96,8 +99,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/provisions/buy', [ProvisionController::class, 'buy'])->name('provisions.buy');
     Route::post('/provisions/received', [ProvisionController::class, 'received'])->name('provisions.received');
 
-
-    Route::post('/set-dark-mode', [HomeController::class, 'setDarkMode'])->name('set-dark-mode');
 });
 
 //grupo de rotas para o middleware de autenticação is_admin

@@ -25,7 +25,7 @@
                             {{ $data['name'] }} atualizou a ordem de compra #{{ $data['id'] }}.
                         </p>
                         <p style="font-size: 16px; line-height: 24px; margin: 20px 0;">
-                            Para mais informações, acesse o sistema.
+                            Para mais informações, acesse o sistema em <a href="https://compras.kokar.com.br" target="_blank">compras.kokar.com.br</a>.
                         </p>
                     </td>
                 </tr>

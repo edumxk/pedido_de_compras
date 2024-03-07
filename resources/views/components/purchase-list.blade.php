@@ -6,7 +6,7 @@
         <div class="grid grid-rows-1 grid-rows-subgrid overflow-hidden min-w-[130rem] sm:grid-cols-8 gap-4 sm:overflow-x-auto sm:grid-auto-flow max-w-auto ">
             @foreach(['opened', 'approved', 'budget', 'provision', 'purchase', 'received', 'finished','rejected'] as $status)
                 <div class=" max-w-64 ">
-                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 text-center">{{ ucfirst($status) }}</h2>
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 text-center">{{ ucfirst(__($status.'_plural')) }}</h2>
                     @forelse($purchase_orders->where('status', $status) as $purchase_order)
                         <a href="{{ route('purchase_orders.show', $purchase_order->hashedId) }}">
                             <div class="rounded-md border border-gray-200 dark:border-gray-700 shadow m-2 min-h-64">

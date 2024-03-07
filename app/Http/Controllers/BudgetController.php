@@ -36,7 +36,7 @@ class BudgetController extends Controller
 
     public function show(string|int $hashedId)
     {
-        if(Auth::user()->is_buyer==false)
+        if(!Auth::user()->is_buyer)
             return redirect()->back()->with('error', 'Você não tem permissão para criar orçamentos');
         //$categories = Category::all();
         //$products = Product::all();
@@ -57,35 +57,51 @@ class BudgetController extends Controller
             'purchase_order_id' => 'required',
         ]);
 
-        $purchase_order = Purchase_order::find($this->decodeHash($request->purchase_order_id));
+        try{
+            $purchase_order = Purchase_order::find($this->decodeHash($request->purchase_order_id));
 
-        //add userid to the request
-        $request->merge([
-            'user_id' => auth()->id(),
-            'status' => 'pending',
-            'payment_id' => null,
-            'purchase_order_id' => $purchase_order->id,
-        ]);
+            //add userid to the request
+            $request->merge([
+                'user_id' => auth()->id(),
+                'status' => 'pending',
+                'payment_id' => null,
+                'purchase_order_id' => $purchase_order->id,
+            ]);
 
-        $budget = Budget::create($request->all());
+            $budget = Budget::create($request->all());
 
-        if($purchase_order->status == 'approved'){
-            $purchase_order->status = 'budget';
-            $purchase_order->save();
+            if($purchase_order->status == 'approved'){
+                $purchase_order->status = 'budget';
+                $purchase_order->save();
+            }
+
+        }catch (\Exception $e){
+            \Log::error('Erro ao criar orçamento: '.$e->getMessage());
+            return redirect()->back()->with('error', 'Erro ao criar orçamento: '.$e->getMessage());
         }
-
+        //send email to admin 5 min after create a budget
+        try {
+            $this->sendEmail( $purchase_order );
+        }catch (\Exception $e){
+            \Log::error('Erro ao enviar email no orçamento: '.$e->getMessage());
+        }
+        \Log::info('Orçamento criado com sucesso');
         return redirect()->route('budgets.products', $this->createHash($budget->id) );
     }
 
     public function products(string|int $hashedId)
     {
-        if(!Auth::user()->is_buyer)
+        if(!Auth::user()->is_buyer )
             return redirect()->back()->with('error', 'Você não tem permissão para editar orçamentos');
 
         $budget = Budget::find($this->decodeHash($hashedId));
-        if ($budget == null) {
-            return redirect()->route('purchase_orders.index')->with('error', 'Budget not found');
-        }
+        if ($budget == null)
+            return redirect()->route('purchase_orders.index')->with('error', 'Orçamento não encontrado');
+
+
+        if($budget->status != 'pending')
+            return redirect()->back()->with('error', 'Não é permitido alterar um orçamento já aprovado');
+
         $products = Product::all();
         $products = $products->map(function ($product) {
             $product->hashedId = $this->createHash($product->id);

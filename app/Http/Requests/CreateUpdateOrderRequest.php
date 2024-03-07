@@ -30,4 +30,22 @@ class CreateUpdateOrderRequest extends FormRequest
             'department_id' => ['required', 'exists:departments,id'],
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'purchase_subject.required' => 'O campo assunto é obrigatório.',
+            'purchase_subject.max' => 'O campo assunto deve ter no máximo 255 caracteres.',
+            'purchase_subject.min' => 'O campo assunto deve ter no mínimo 3 caracteres.',
+            'description.required' => 'O campo descrição é obrigatório.',
+            'description.min' => 'O campo descrição deve ter no mínimo 30 caracteres.',
+            'department_id.required' => 'O campo departamento é obrigatório.',
+            'department_id.exists' => 'O departamento selecionado não existe.',
+        ];
+    }
 }

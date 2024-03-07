@@ -1,8 +1,8 @@
 <x-app-layout>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-    <x-error />
-    <x-message />
+    <x-input-error/>
+    <x-error/>
     <div>
         <div class="bg-white dark:bg-gray-800 p-6 mx-auto border p-2 rounded-md overflow-y-hidden mx-4">
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Produtos</h1>
@@ -11,7 +11,6 @@
                     Cadastrar Produto
                 </a>
             </div>
-
             <div id="accordion-collapse" data-accordion="collapse">
                 <h2 id="accordion-collapse-heading-1">
                     <button type="button" class="flex items-center justify-between w-full p-5 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-collapse-body-1" aria-expanded="true" aria-controls="accordion-collapse-body-1">
@@ -21,7 +20,7 @@
                         </svg>
                     </button>
                 </h2>
-                <div id="accordion-collapse-body-1" class="hidden" aria-labelledby="accordion-collapse-heading-1">
+                <div id="accordion-collapse-body-1" class="hidden py-10" aria-labelledby="accordion-collapse-heading-1">
                     <x-budget.add-product :products="$products" :budget="$budget" />
                 </div>
                 <h2 id="accordion-collapse-heading-2">
@@ -32,7 +31,7 @@
                         </svg>
                     </button>
                 </h2>
-                <div id="accordion-collapse-body-2" class="hidden" aria-labelledby="accordion-collapse-heading-2">
+                <div id="accordion-collapse-body-2" class="hidden py-10" aria-labelledby="accordion-collapse-heading-2">
                     <x-budget.list-products :budget="$budget" />
                     <x-budget.payments-list :budget="$budget" />
                 </div>
@@ -44,15 +43,17 @@
                         </svg>
                     </button>
                 </h2>
-                <div id="accordion-collapse-body-3" class="hidden" aria-labelledby="accordion-collapse-heading-3">
+                <div id="accordion-collapse-body-3" class="hidden py-10" aria-labelledby="accordion-collapse-heading-3">
                     <div class="p-5 border border-t-0 border-gray-200 dark:border-gray-700">
                         <x-budget.payment-plans :budget="$budget" />
                     </div>
                 </div>
             </div>
-            <a href="{{ route('purchase_orders.show', $budget) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
-                Voltar
-            </a>
+            <div class="mt-10">
+                <a href="javascript:history.back()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+                    Voltar
+                </a>
+            </div>
         </div>
     </div>
 </x-app-layout>

@@ -10,7 +10,7 @@
             <div class="mt-5">
                 <x-attachment :purchase_order="$purchase_order" :type="'interaction'" :interaction="$interaction->id" :budget="null" />
             </div>
-            @if($interaction->created_at->addHours(48) >= now() && Auth()->user()->id == $purchase_order->user_id)
+            @if($interaction->created_at->addHours(48) >= now() && Auth()->user()->id == $interaction->user_id)
                 <button id="toggleButton{{ $interaction->id }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5">
                     Uploads
                 </button>

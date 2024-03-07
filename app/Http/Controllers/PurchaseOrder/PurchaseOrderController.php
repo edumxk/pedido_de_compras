@@ -59,15 +59,30 @@ class PurchaseOrderController extends Controller
 
     public function store(CreateUpdateOrderRequest $request)
     {
-        Purchase_order::create([
-            'purchase_subject' => $request->purchase_subject,
-            'description' => $request->description,
-            'user_id' => auth()->id(),
-            'department_id' => $request->department_id,
-        ]);
+        try {
+            Purchase_order::create([
+                'purchase_subject' => $request->purchase_subject,
+                'description' => $request->description,
+                'user_id' => auth()->id(),
+                'department_id' => $request->department_id,
+            ]);
+            \Log::info('Criando ordem de compras. User: ' . auth()->id());
+        } catch (\Exception $e) {
+            \Log::info('error store purchase order: ' . $e->getMessage());
+            return back()->with('error', 'Erro ao criar ordem de compra');
+        }
 
+        try {
+            $ordemCompra = Purchase_order::latest()->first();
+            $this->sendEmail($ordemCompra);
+            \Log::info('Email enviado com sucesso. user: ' . auth()->id());
+        }catch (\Exception $e){
+            \Log::info('error send email: '. $e->getMessage());
+            return back()->with('error', 'Erro ao enviar email');
+        }
         //redirect to purchase_orders page
-        return redirect('/purchase_orders');
+        \Log::info('Ordem de Compra Criada com Sucesso. user: ' . auth()->id());
+        return redirect('/purchase_orders')->with('success', 'Ordem de Compra Criada com Sucesso');
     }
 
     public function show(string|int $hashedId)
@@ -107,9 +122,9 @@ class PurchaseOrderController extends Controller
             'user_id' => auth()->id(),
             'department_id' => $request->department_id,
         ]);
-
+        \Log::info('Ordem de Compra Atualizada com Sucesso. N°' . $purchase_order->id. ' status: ' .$purchase_order->status . ' user: ' . auth()->id());
         //refresh the page with message success or error
-        return redirect()->back()->with('message', 'Purchase Order Updated Successfully');
+        return redirect()->back()->with('success', 'Purchase Order Updated Successfully');
     }
 
     public function approve(Request $request)
@@ -121,7 +136,7 @@ class PurchaseOrderController extends Controller
                 'status' => 'required|string',
             ]);
 
-            $message = 'Purchase Order ' .$request->status. " Successfully \n" .$request->body;
+            $message = 'Ordem de compra ' . __($request->status.'_f'). " com sucesso! \n" .$request->body;
             //save new status
             Interaction::create([
                 'purchase_order_id' => $request->purchase_order_id,
@@ -144,10 +159,10 @@ class PurchaseOrderController extends Controller
             }
 
             //refresh the page with message success or error
-            return redirect()->back()->with('message', 'Purchase Order ' .$request->status. ' Successfully');
+            return redirect()->back()->with('success', 'Purchase Order ' .__($request->status). ' Successfully');
 
         }else{
-            return redirect()->back()->with('message', 'You are not authorized to perform this action');
+            return redirect()->back()->with('error', 'You are not authorized to perform this action');
         }
     }
 }
