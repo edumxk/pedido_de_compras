@@ -11,7 +11,7 @@
                         <a href="{{ route('purchase_orders.show', $purchase_order->hashedId) }}">
                             <div class="rounded-md border border-gray-200 dark:border-gray-700 shadow m-2 min-h-64">
                                     <div class="bg-{{ 'gray-800' }} dark:bg-{{ 'gray-200' }} h-10 w-100 flex items-center justify-center rounded-t">
-                                        <p class="text-{{ 'gray-300' }} dark:text-{{ 'gray-800' }} font-bold">{{ __($purchase_order->department->name) }}</p>
+                                        <p class="text-{{ 'gray-200' }} dark:text-{{ 'gray-800' }} font-bold">{{ __($purchase_order->department->name) }}</p>
                                     </div>
                                     <div class="h-16">
                                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mt-2 text-center">{{ \Illuminate\Support\Str::limit($purchase_order->purchase_subject, 48) }}</h3>
