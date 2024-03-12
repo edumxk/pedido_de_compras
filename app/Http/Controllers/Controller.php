@@ -53,9 +53,7 @@ class Controller extends BaseController
         if($id == null && $attachment == null) {
             $message = $purchase_order->description;
             $name = $purchase_order->user->name;
-        }
-
-        if($attachment != null){
+        }elseif($attachment != null){
             $message .= 'Novo anexo: '. $attachment->file_extension;
             $name = Auth::user()->name;
         }else{

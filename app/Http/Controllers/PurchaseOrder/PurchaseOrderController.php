@@ -73,7 +73,7 @@ class PurchaseOrderController extends Controller
         }
 
         try {
-            $ordemCompra = Purchase_order::latest();
+            $ordemCompra = Purchase_order::
             $this->sendEmail($ordemCompra);
             \Log::info('Email enviado com sucesso. user: ' . auth()->id());
         }catch (\Exception $e){
