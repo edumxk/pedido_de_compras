@@ -73,7 +73,7 @@ class PurchaseOrderController extends Controller
         }
 
         try {
-            $ordemCompra = Purchase_order::latest()->first();
+            $ordemCompra = Purchase_order::latest();
             $this->sendEmail($ordemCompra);
             \Log::info('Email enviado com sucesso. user: ' . auth()->id());
         }catch (\Exception $e){
@@ -122,6 +122,13 @@ class PurchaseOrderController extends Controller
             'user_id' => auth()->id(),
             'department_id' => $request->department_id,
         ]);
+
+        try{
+            $this->sendEmail($purchase_order);
+        }catch (\Exception $e){
+            \Log::info('error send email: '. $e->getMessage());
+            return back()->with('error', 'Error sending email');
+        }
         \Log::info('Ordem de Compra Atualizada com Sucesso. N°' . $purchase_order->id. ' status: ' .$purchase_order->status . ' user: ' . auth()->id());
         //refresh the page with message success or error
         return redirect()->back()->with('success', 'Purchase Order Updated Successfully');
