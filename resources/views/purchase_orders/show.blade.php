@@ -42,7 +42,7 @@
                     </form>
                 @endif
             </div>
-            @if($purchase_order->status == 'provision' && Auth::user()->is_financial == 0 )
+            @if($purchase_order->status == 'provision' && Auth::user()->is_financial == 1 )
                 <x-provision.index :purchase_order="$purchase_order"/>
             @endif
 
