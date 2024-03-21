@@ -1,6 +1,6 @@
 ## Sobre o projeto
 
-Este projeto foi desenvolvido para o teste de desenvolvedor PHP da kokar tintas.
+Este projeto kokar tintas compras
 
 ## Tecnologias utilizadas
 

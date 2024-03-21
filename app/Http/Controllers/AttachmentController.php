@@ -61,8 +61,9 @@ class AttachmentController extends Controller
     public function view(string|int $file_name)
     {
         $attachment = Attachment::findOrFail($file_name);
-        if (isset($attachment->file_path)) {
-            return response()->file(storage_path('app/public/' . $attachment->file_path));
+        \Log::info('Load image', $attachment);
+        if (!isset($attachment->file_path)) {
+            return response()->file(storage_path('/app/public/' . $attachment->file_path));
         }else
             return redirect()->back()->with('error', 'File not found');
     }
