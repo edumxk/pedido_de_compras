@@ -32,17 +32,18 @@ class AttachmentController extends Controller
         try{
             Attachment::create($data);
         }catch (\Exception $e){
-            return redirect()->back()->with('error', 'Erro ao enviar o arquivo');
+            return redirect()->back()->with('error', 'Erro ao anexar o arquivo, procure o TI');
         }
         \Log::info('Arquivo enviado com sucesso');
+        /*
         try {
             $purchase_order = Purchase_order::find($request->purchase_order_id);
             $attachment = $purchase_order->attachments->last();
-            $this->sendEmail($purchase_order, null, $attachment);
+            $this->sendEmail($purchase_order, null, $attachment); --remove envio de email em anexos
         }catch (\Exception $e){
             \Log::info('error send email: '. $e->getMessage());
             return redirect()->back()->with('error', 'Erro ao enviar email de anexo.');
-        }
+        }*/
 
         return redirect()->back()->with('success', 'Arquivo enviado com sucesso!');
 
