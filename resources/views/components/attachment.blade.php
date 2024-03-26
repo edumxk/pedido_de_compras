@@ -14,7 +14,7 @@
             <div class="flex dark:text-white text-gray-800">
         @foreach($attachments as $attachment)
                 <div class="text-center px-4">
-                    <a class="flex cursor-pointer justify-center" onclick="openPopup('{{ asset('storage/' . $attachment['file_path']) }}')">
+                    <a class="flex cursor-pointer justify-center" onclick="openPopup('{{ route('attachments.view',$attachment->file_name) }}')">
                         @if($attachment->file_type == 'application/pdf')
                             <x-far-file-pdf width="30px" height="30px" />
                         @elseif(explode('/',$attachment->file_type)[0] == 'image')

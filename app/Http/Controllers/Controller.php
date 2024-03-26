@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Hashids\Hashids;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -38,17 +39,32 @@ class Controller extends BaseController
     protected function sendEmail($purchase_order, $id = null, $attachment = null)
     {
         $message = '';
-        $name = '';
+        $interactionUserIds = $purchase_order->interactions
+            ->pluck('user_id') // Extrai todos os user_id das interações
+            ->unique(); // Remove quaisquer duplicatas
+        $userId = $purchase_order->user_id;
+        $interactionUserIds[] = $userId;
+
+        //getusers admin
+        $adminUser = User::where('is_admin', 1)
+            ->get('id');
+
+        //remove admin user from interactionUserIds
+        $interactionUserIds = $interactionUserIds->diff($adminUser)->unique();
+
+
+
         if($purchase_order->status == 'opened' || $purchase_order->status == 'rejected')
-            $users = Auth::getUser()->where('is_admin', 1)
-                ->orWhere('id', $purchase_order->user_id)
-                ->orWhere('id', 'in', $purchase_order->interactions->get('user_id'))
-                ->get();
-        else
-            $users = Auth::getUser()->where('is_buyer', 1)
-                ->orWhere('id', $purchase_order->user_id)
-                ->orWhere('id', 'in', $purchase_order->interactions->get('user_id'))
-                ->get();
+            $users = User::where('is_admin', 1)
+                ->orWhere('id','in', $interactionUserIds)
+                ->get()->unique();
+        if($purchase_order->status == 'provision')
+            $users = User::where('is_financial', 1)
+                ->orWhere('id','in', $interactionUserIds)
+                ->get()->unique();
+        if($purchase_order->status == 'approved')
+            $users = User::where('id','in', $interactionUserIds)
+                ->get()->unique();
 
         if($id == null && $attachment == null) {
             $message = $purchase_order->description;

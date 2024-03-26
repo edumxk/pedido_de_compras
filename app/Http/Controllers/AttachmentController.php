@@ -58,13 +58,13 @@ class AttachmentController extends Controller
     }
 
     //return view of the file
-    public function view(string|int $file_name)
+    public function view(string $file_name)
     {
-        $attachment = Attachment::findOrFail($file_name);
-        if (isset($attachment->file_path)) {
-            return response()->file(storage_path('app/public/' . $attachment->file_path));
+        $attachment = Attachment::where('file_name', $file_name)->firstOrFail();
+        if (isset($attachment['file_path'])) {
+            return response()->file(storage_path('app/public/' . $attachment['file_path']));
         }else
-            return redirect()->back()->with('error', 'File not found');
+            return redirect()->back()->with('error', 'Arquivo não encontrado no servidor.');
     }
 
     public function destroy($id)

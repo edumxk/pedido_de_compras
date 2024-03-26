@@ -87,6 +87,11 @@ class PurchaseOrderController extends Controller
 
     public function show(string|int $hashedId)
     {
+        //verifica se é o criador ou se é admin ou comprador ou financeiro.
+        if(auth()->id() != Purchase_order::findOrFail($this->decodeHash($hashedId))->user_id && auth()->user()->is_admin != 1 && auth()->user()->is_buyer != 1 && auth()->user()->is_financial != 1){
+            return redirect('/purchase_orders')->with('error', 'Você não tem permissão para acessar essa página');
+        }
+
         //get the purchase_order
         $purchase_order = Purchase_order::findOrFail($this->decodeHash($hashedId));
         $purchase_order->hashedId = $this->createHash($purchase_order->id);
