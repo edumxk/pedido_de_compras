@@ -25,6 +25,11 @@
                                          <a href="{{ route('budgets.create', $purchase_order->hashedId) }}" class="mt-4 inline-block bg-green-500 text-white rounded px-4 py-2">{{ __('Inserir Orçamento') }}</a>
                                     @endif
                                 </div>
+                                <div class="text-center">
+                                    @if(($status == 'opened' || $status == 'budget') && Auth::user()->is_admin)
+                                        <p class="mt-4 inline-block bg-red-500 text-white rounded px-4 py-2">{{ __('Pendente!') }}</p>
+                                    @endif
+                                </div>
                             </div>
                         </a>
                     @empty
