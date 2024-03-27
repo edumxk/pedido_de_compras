@@ -18,7 +18,7 @@
 @elseif($purchase_order->status == 'budget')
     <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
         <strong class="font-bold">Em orçamento!</strong>
-        <span class="block sm:inline">Esta ordem com orçamento pendente de aprovação.</span>
+        <span class="block sm:inline">Esta ordem de compra está com orçamento pendente de aprovação.</span>
     </div>
 @elseif($purchase_order->status == 'provision')
     <div class="bg-blue-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
