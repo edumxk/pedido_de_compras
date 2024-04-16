@@ -28,7 +28,7 @@
                 </div>
                 <div class="flex flex-col">
                     <label for="price" class="text-gray-700 dark:text-gray-200">Modelo</label>
-                    <input type="text" id="model" name="model" value="{{ old('model') }}" required class="px-4 py-2 border rounded-lg dark:bg-gray-800 dark:text-gray-200">
+                    <input type="text" id="model" name="model" value="{{ old('model') }}" class="px-4 py-2 border rounded-lg dark:bg-gray-800 dark:text-gray-200">
                 </div>
                 <div class="flex flex-col">
                     <label for="price" class="text-gray-700 dark:text-gray-200">Categoria</label>
