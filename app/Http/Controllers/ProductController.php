@@ -45,9 +45,9 @@ class ProductController extends Controller
         $previousUrl = $request->input('previous');
 
         $request->validate([
-            'description' => 'required',
-            'brand' => 'required',
-            'model' => 'required',
+            'description' => 'required|min:3|max:255',
+            'brand' => '',
+            'model' => '',
             'category_id' => 'required',
         ]);
 
