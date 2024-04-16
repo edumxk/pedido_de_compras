@@ -47,7 +47,7 @@ class ProductController extends Controller
         $request->validate([
             'description' => 'required|min:3|max:255',
             'brand' => '',
-            'model' => '',
+            'model' => 'required',
             'category_id' => 'required',
         ]);
 
