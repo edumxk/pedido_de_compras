@@ -60,7 +60,7 @@ class Controller extends BaseController
                 ->get()->unique();
         if($purchase_order->status == 'provision')
             $users = User::where('is_financial', 1)
-                ->orWhere('id','in', $interactionUserIds)
+                ->orWhere('is_buyer', 1)
                 ->get()->unique();
         if($purchase_order->status == 'approved')
             $users = User::where('id','in', $interactionUserIds)
