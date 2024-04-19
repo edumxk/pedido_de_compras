@@ -14,10 +14,10 @@
                                         <p class="text-{{ 'gray-200' }} dark:text-{{ 'gray-800' }} font-bold">{{ __($purchase_order->department->name) }}</p>
                                     </div>
                                     <div class="h-16">
-                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mt-2 text-center">{{ \Illuminate\Support\Str::limit($purchase_order->purchase_subject, 48) }}</h3>
+                                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mt-2 text-center">{{ \Illuminate\Support\Str::limit( 'Nº '.$purchase_order->id .' - '. $purchase_order->purchase_subject, 48) }}</h3>
                                     </div>
                                 <div class="bg-white dark:bg-gray-800 px-4">
-                                    <p class="mt-2 text-gray-600 dark:text-gray-300">{{ __($purchase_order->user->name) }}</p>
+                                    <p class="mt-2 text-gray-600 dark:text-gray-300">{{ __($purchase_order->user->name)}}</p>
                                     <p class="mt-2 text-gray-600 dark:text-gray-300"> {{ date_format($purchase_order->created_at,'d/m/Y H:i') }}</p>
                                 </div>
                                 <div class="text-center">
