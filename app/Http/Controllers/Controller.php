@@ -38,6 +38,7 @@ class Controller extends BaseController
 
     protected function sendEmail($purchase_order, $id = null, $attachment = null)
     {
+        $users = [];
         $message = '';
         $interactionUserIds = $purchase_order->interactions
             ->pluck('user_id') // Extrai todos os user_id das interações
@@ -76,7 +77,6 @@ class Controller extends BaseController
             $message = $purchase_order->interactions->find($id)->body;
             $name = $purchase_order->interactions->find($id)->user->name;
         }
-
 
         $data = [
             'from' => env('MAIL_FROM_ADDRESS'),
