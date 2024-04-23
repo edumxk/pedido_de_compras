@@ -8,9 +8,9 @@
     <div class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white p-6 mx-auto border p-2 rounded-md mt-8 overflow-y-hidden mx-4 sm:w-3/5">
         <p class="text-sm sm
         :text-base md:text-lg lg:text-xl">Cadastrar Fornecedor</p>
-        @if ($errors->any())
-            <x-input-error :messages="$errors->all()"/>
-        @endif
+        <x-auth-session-status class="mb-4" :status="session('status')" />
+        <x-input-error/>
+        <x-error/>
         <form action="{{ route('suppliers.store') }}" method="POST" class="space-y-4 mx-auto">
             @csrf
             <div class="flex flex-col space-y-4">

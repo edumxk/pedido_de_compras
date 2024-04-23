@@ -60,7 +60,21 @@ class SupplierController extends Controller
             'contacts.*.email' => 'required|email',
             'contacts.*.call' => 'required',
             'contacts.*.whatsapp' => 'required',
-        ]);
+        ],['cnpj.unique' => 'CNPJ já cadastrado',
+            'cnpj.min' => 'CNPJ inválido, deve conter 14 digitos, ex: 17832268000192',
+            'cnpj.max' => 'CNPJ inválido, deve conter 14 digitos, ex: 17832268000192',
+                'fantasy_name.required' => 'Nome fantasia é obrigatório',
+                'fantasy_name.min' => 'Nome fantasia deve conter no mínimo 6 caracteres',
+                'fantasy_name.max' => 'Nome fantasia deve conter no máximo 255 caracteres',
+                'company_name.required' => 'Razão social é obrigatório',
+                'company_name.min' => 'Razão social deve conter no mínimo 6 caracteres',
+                'company_name.max' => 'Razão social deve conter no máximo 255 caracteres',
+                'address.required' => 'Endereço é obrigatório',
+                'address.min' => 'Endereço deve conter no mínimo 6 caracteres',
+                'address.max' => 'Endereço deve conter no máximo 255 caracteres',
+                'contacts.required' => 'Pelo menos um contatos é obrigatório',
+            ]
+        );
 
         // Separar os dados do fornecedor e os contatos da requisição
         $supplierData = $request->except('contacts');
