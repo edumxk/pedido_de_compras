@@ -1,7 +1,7 @@
 <form action="{{ route('payments.store') }}" method="POST">
     @csrf
     <div class="flex flex-col">
-        <div class="flex flex-row justify-between">
+        <div class="flex flex-row flex-wrap justify-between lg:min-w-[60%] m-auto">
             <div class="flex flex-col">
                 <label for="type" class="text-sm text-gray-600 dark:text-gray-400">Tipo</label>
                 <select name="type" id="type" class="w-64 h-10 px-3 text-base placeholder-gray-300 border rounded-lg focus:shadow-outline" @selected('type')>

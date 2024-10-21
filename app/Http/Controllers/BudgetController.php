@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\addProductRequest;
 use App\Models\Budget;
-use App\Models\Category;
-use App\Models\Price;
 use App\Models\Product;
 use App\Models\Purchase_order;
 use App\Models\Supplier;
@@ -41,7 +39,6 @@ class BudgetController extends Controller
         //$categories = Category::all();
         //$products = Product::all();
         $suppliers = Supplier::all();
-        //$prices = Price::find($this->decodeHash($hashedId));
 
         return view('budgets.create', compact('suppliers', 'hashedId'));
 
@@ -111,15 +108,15 @@ class BudgetController extends Controller
         $budget->hashedId = $hashedId;
         if($budget->products == null || $budget->products->isEmpty ){
             $budget->products = [];
-            return view('budgets.products', compact('budget', 'products'));
+            $hashedId = $this->createHash($budget->purchase_order->id);
+            return view('budgets.products', compact('budget', 'products', 'hashedId'));
         }
 
         $budget->products = $budget->products->map(function ($product) {
             $product->hashedId = $this->createHash($product->id);
             return $product;
         });
-
-        return view('budgets.products', compact('budget', 'products'));
+        return view('budgets.products', compact('budget', 'products', 'hashedId'));
     }
 
     public function storeProducts(addProductRequest $request)
@@ -165,8 +162,8 @@ class BudgetController extends Controller
             foreach ($purchase_order->budgets as $budget) {
                 if($request->budget_id == $this->createHash($budget->id))
                     $budget->status = 'approved';
-                else
-                    $budget->status = 'rejected';
+                //else
+                   // $budget->status = 'rejected';
                 $budget->save();
                 \Log::info('Salvando Status do Orçamento: '.$budget->status . '|budget_id: '.$budget->id);
 
@@ -176,10 +173,12 @@ class BudgetController extends Controller
                         $payment->save();
                         \log::info('pagamentos alterados: '.$payment->status . '|payment_id: '.$payment->id);
                     }
-                    else {
-                        $payment->status = 'rejected';
-                        $payment->save();
-                        \log::info('pagamentos alterados: '.$payment->status . '|payment_id: '.$payment->id);
+                    else{
+                        if($request->budget_id == $this->createHash($payment->budget_id)){
+                            $payment->status = 'rejected';
+                            $payment->save();
+                            \log::info('pagamentos alterados: '.$payment->status . '|payment_id: '.$payment->id);
+                        }
                     }
                     \log::info('pagamentos alterados: '.$payment->status);
                 }

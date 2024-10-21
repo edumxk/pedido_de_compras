@@ -43,7 +43,7 @@
         @empty
             <tbody>
             <tr>
-                <td colspan="4" class="text-center">Nenhum Produto</td>
+                <td colspan="4" class="text-center py-3 dark:text-gray-200">Nenhum Produto Cadastrado no Orçamento!</td>
             </tr>
             </tbody>
         @endforelse

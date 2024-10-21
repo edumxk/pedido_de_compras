@@ -49,5 +49,4 @@ class Purchase_order extends Model
         return $this->hasMany(Budget::class);
     }
 
-
 }

@@ -4,7 +4,7 @@
     <x-input-error/>
     <x-error/>
     <div>
-        <div class="bg-white dark:bg-gray-800 p-6 mx-auto border p-2 rounded-md overflow-y-hidden mx-4">
+        <div class="bg-white dark:bg-gray-800 p-6 mx-auto mt-12 border p-2 rounded-md overflow-y-hidden mx-4 lg:max-w-[95%]">
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Produtos</h1>
             <div class="flex justify-end pb-3">
                 <a href="{{ route('products.create') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
@@ -31,7 +31,7 @@
                         </svg>
                     </button>
                 </h2>
-                <div id="accordion-collapse-body-2" class="hidden py-10" aria-labelledby="accordion-collapse-heading-2">
+                <div id="accordion-collapse-body-2" class="py-10" aria-labelledby="accordion-collapse-heading-2">
                     <x-budget.list-products :budget="$budget" />
                     <x-budget.payments-list :budget="$budget" />
                 </div>
@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="mt-10">
-                <a href="javascript:history.back()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+                <a href="{{ route('purchase_orders.show', ['hashedId' => $hashedId ]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
                     Voltar
                 </a>
             </div>
