@@ -3,7 +3,7 @@
         @forelse($budget->payments as $payment)
             @if($loop->first)
                 <thead>
-                    <tr class="text-left dark:bg-gray-900">
+                    <tr class="text-left uppercase dark:bg-gray-900">
                         <th class="pl-4  py-2">Tipo de Pagamento</th>
                         <th class="mx-4 py-2">Desconto/Acrécimo</th>
                         <th class="mx-4 py-2">Valor Desconto</th>

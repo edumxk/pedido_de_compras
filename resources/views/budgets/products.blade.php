@@ -49,10 +49,16 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-10">
+            <div class="flex justify-between">
                 <a href="{{ route('purchase_orders.show', ['hashedId' => $hashedId ]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
                     Voltar
                 </a>
+                <form action="{{ route('budgets.delete', ['hashedId' => $budget->hashedId ]) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este Orçamento? Esta ação não tem volta!');">
+                    @csrf
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4">
+                        Excluir Orçamento
+                    </button>
+                </form>
             </div>
         </div>
     </div>

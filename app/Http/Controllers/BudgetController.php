@@ -135,6 +135,31 @@ class BudgetController extends Controller
         return redirect()->route('budgets.products', $request->budget_id)->with('message', 'Product added to budget successfully');
     }
 
+    public function delete($hashedId)
+    {
+        try {
+            $budget = Budget::find($this->decodeHash($hashedId));
+            $id = $this->createHash($budget->purchase_order_id);
+
+            // Delete related prices
+            foreach ($budget->prices as $product) {
+                $product->delete();
+            }
+
+            // Delete related payment plans
+            foreach ($budget->payments as $payment) {
+                $payment->delete();
+            }
+
+            // Delete the budget
+            $message = $budget->delete();
+
+            return redirect()->route('purchase_orders.show', $id)->with('erro', 'Orçamento removido com sucesso');
+        }catch (\Exception $e){
+            return redirect()->back()->with('error', 'Erro ao remover orçamento: '.$e->getMessage());
+        }
+
+    }
     public function deleteProduct(Request $request)
     {
         $price = Budget::find($this->decodeHash($request->budget_id))->prices->where('product_id', $request->product_id)->first();

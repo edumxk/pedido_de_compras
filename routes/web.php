@@ -60,6 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/budgets/{hashedId}', [BudgetController::class, 'index'])->name('budgets.index');//listar
     Route::get('/budgets/create/{hashedId}', [BudgetController::class, 'show'])->name('budgets.create'); //criar novo
     Route::post('/budgets/create', [BudgetController::class, 'store'])->name('budget.create'); //salvar novo
+    Route::post('/budgets/delete/{hashedId}', [BudgetController::class, 'delete'])->name('budgets.delete'); //salvar novo
     Route::get('/budgets/products/{hashedId}', [BudgetController::class, 'products'])->name('budgets.products');
     Route::post('/budgets/products', [BudgetController::class, 'storeProducts'])->name('budgets.storeProducts');
     Route::get('/budgets/details/{hashedId}', [BudgetController::class, 'details'])->name('budgets.details');

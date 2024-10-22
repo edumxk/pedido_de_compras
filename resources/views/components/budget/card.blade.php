@@ -1,7 +1,7 @@
-<div class="dark:bg-gray-800">
+<div class="dark:bg-gray-800 my-16">
     <div class="flex items-center justify-between w-full p-5 font-medium text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 gap-3" data-accordion-target="#accordion-collapse-body-product-{{ $budget->id }}" aria-expanded="false" aria-controls="accordion-collapse-body-product-{{ $budget->id }}">
         <span>
-            <label> Range de Preço do Orçamento:</label>
+            <label>Range de Preço do Orçamento:</label>
             <label class="text-sm text-gray-900 dark:text-gray-200 text-center">
                             @php
                                 $range = [];
@@ -14,7 +14,7 @@
         </span>
         <span>
             <label>Fornecedor:</label>
-            <a href="{{ route('budgets.products', $budget->hashedId) }}" class="text-sm text-gray-900 dark:text-gray-200">
+            <a href="{{ route('budgets.products', $budget->hashedId) }}" class="uppercase text-sm text-gray-900 dark:text-gray-200">
                 {{ $budget->supplier->fantasy_name }}
             </a>
             @if($budget->status == 'approved')
@@ -39,8 +39,8 @@
     </div>
     <div>
         <x-budget.products :budget="$budget"/>
-    </div>
         <x-budget.budget-approve :budget="$budget"/>
+    </div>
 </div>
 
 <script>

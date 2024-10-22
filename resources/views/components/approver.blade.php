@@ -13,6 +13,7 @@
                 <option value="opened">Pendente</option>
                 <option value="approved">Aprovar</option>
                 <option value="rejected">Reprovar</option>
+                <option value="received">Aprovação Direta Para Provisão</option>
             </select>
         </div>
 

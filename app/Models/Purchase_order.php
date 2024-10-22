@@ -16,6 +16,7 @@ class Purchase_order extends Model
         'status',
         'user_id',
         'department_id',
+        'aprovacao_direta',
     ];
 
     public static function create(array $array): void

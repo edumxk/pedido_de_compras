@@ -104,9 +104,11 @@ class PurchaseOrderController extends Controller
 
         try{
             //check if payments is not empty
-            if($purchase_order->budgets()->where('status', 'approved')->get()->isEmpty() && $purchase_order->status == 'provision'){
-                \Log::info('Budget not approved in purchase order: '. $purchase_order->id . ' status: '. $purchase_order->status);
-                return back()->with('error', 'Orçamento: ' .$purchase_order->id. ' não aprovado, status: ' .$purchase_order->status. '. Envie esse erro ao T.I.');
+            if(($purchase_order->budgets()->where('status', 'approved')->get()->isEmpty() && $purchase_order->status == 'provision')){
+                if( $purchase_order->aprovacao_direta == 0) {
+                    \Log::info('Budget not approved in purchase order: ' . $purchase_order->id . ' status: ' . $purchase_order->status);
+                    return back()->with('error', 'Orçamento: ' . $purchase_order->id . ' não aprovado, status: ' . $purchase_order->status . '. Envie esse erro ao T.I.');
+                }
             }
 
         }catch (\Exception $e){
@@ -145,7 +147,7 @@ class PurchaseOrderController extends Controller
             //validate the request
             $request->validate([
                 'purchase_order_id' => 'required|integer',
-                'status' => 'required|string',
+                'status' => 'required|string|in:approved,received,rejected,opened',
             ]);
 
             $message = 'Ordem de compra ' . __($request->status.'_f'). " com sucesso! \n" .$request->body;
@@ -162,6 +164,12 @@ class PurchaseOrderController extends Controller
             $purchase_order->update([
                 'status' => $request->status,
             ]);
+
+            if($request->status == 'provision'){
+                $purchase_order->update([
+                    'aprovacao_direta' => 1,
+                ]);
+            }
 
             try {
                 $this->sendEmail($purchase_order, $purchase_order->interactions->last()->id);

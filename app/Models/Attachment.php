@@ -19,6 +19,12 @@ class Attachment extends Model
         'purchase_order_id',
         'budget_id',
         'interaction_id',
+        'name_uploaded',
+        'user_id'
+    ];
+
+    protected $attributes = [
+        'file_path' => '',
     ];
 
     public static function create(array $array): void
