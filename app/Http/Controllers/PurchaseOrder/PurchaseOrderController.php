@@ -14,40 +14,50 @@ class PurchaseOrderController extends Controller
 {
     public function index(Request $request)
     {
-        //get all purchase_orders
-        $purchase_orders = Purchase_order::query();
+        try {
+            $purchase_orders = Purchase_order::query();
 
-        // Filter by subject and description
-        if ($request->has('subject_description')) {
-            $purchase_orders->where(function ($query) use ($request) {
-                $query->where('purchase_subject', 'like', '%' . $request->subject_description . '%')
-                    ->orWhere('description', 'like', '%' . $request->subject_description . '%');
+            // Filter by subject and description
+            if ($request->has('subject_description')) {
+                $purchase_orders->where(function ($query) use ($request) {
+                    $query->where('purchase_subject', 'like', '%' . $request->subject_description . '%')
+                        ->orWhere('description', 'like', '%' . $request->subject_description . '%')
+                        ->orWhere('id', $request->subject_description );
+                });
+            }
+
+            // Filter by department id
+            if ($request->has('department_id') && $request->department_id != '') {
+                $purchase_orders->where('department_id', $request->department_id);
+            }
+
+            // Filter by user name
+            if ($request->has('user_name')) {
+                $purchase_orders->whereHas('user', function ($query) use ($request) {
+                    $query->where('name', 'like', '%' . $request->user_name . '%');
+                });
+            }
+
+            // Filter by initial and final dates
+            if ($request->has('initial_date') && $request->has('final_date')) {
+                $purchase_orders->whereBetween(\DB::raw('DATE(created_at)'), [$request->initial_date, $request->final_date]);
+            }
+
+            $purchase_orders = $purchase_orders->get();
+
+            $purchase_orders = $purchase_orders->map(function ($purchase_order) {
+                $purchase_order->hashedId = $this->createHash($purchase_order->id);
+                return $purchase_order;
             });
+
+            // Get all departments
+            $departments = Department::all();
+
+            return view('purchase_orders.index', compact('purchase_orders', 'departments'));
+        } catch (\Exception $e) {
+            \Log::info('error index purchase order: ' . $e->getMessage());
+            return back()->with('error', 'Erro ao listar ordens de compra');
         }
-
-        // Filter by department id
-        if ($request->has('department_id') && $request->department_id != '') {
-            $purchase_orders->where('department_id', $request->department_id);
-        }
-
-        // Filter by user name
-        if ($request->has('user_name')) {
-            $purchase_orders->whereHas('user', function ($query) use ($request) {
-                $query->where('name', 'like', '%' . $request->user_name . '%');
-            });
-        }
-
-        $purchase_orders = $purchase_orders->get();
-
-        $purchase_orders = $purchase_orders->map(function ($purchase_order) {
-            $purchase_order->hashedId = $this->createHash($purchase_order->id);
-            return $purchase_order;
-        });
-
-        // Get all departments
-        $departments = Department::all();
-
-        return view('purchase_orders.index', compact('purchase_orders', 'departments'));
     }
 
     public function create()
@@ -149,8 +159,12 @@ class PurchaseOrderController extends Controller
                 'purchase_order_id' => 'required|integer',
                 'status' => 'required|string|in:approved,received,rejected,opened',
             ]);
-
-            $message = 'Ordem de compra ' . __($request->status.'_f'). " com sucesso! \n" .$request->body;
+        try{
+            $purchase_order = Purchase_order::findOrFail($request->purchase_order_id);
+            if($request->status == $purchase_order->status){
+                return back()->with('error', 'Essa posição já é a atual');
+            }
+            $message = 'Ordem de compra ' . __($request->status). " com sucesso! \n" .$request->body;
             //save new status
             Interaction::create([
                 'purchase_order_id' => $request->purchase_order_id,
@@ -159,7 +173,7 @@ class PurchaseOrderController extends Controller
             ]);
 
             //update the purchase_order status
-            $purchase_order = Purchase_order::findOrFail($request->purchase_order_id);
+
 
             $purchase_order->update([
                 'status' => $request->status,
@@ -180,7 +194,10 @@ class PurchaseOrderController extends Controller
 
             //refresh the page with message success or error
             return redirect()->back()->with('success', 'Purchase Order ' .__($request->status). ' Successfully');
-
+        }catch (\Exception $e){
+            \Log::info('error interaction: '. $e->getMessage());
+            return back()->with('error', 'Error creating interaction');
+        }
         }else{
             return redirect()->back()->with('error', 'You are not authorized to perform this action');
         }

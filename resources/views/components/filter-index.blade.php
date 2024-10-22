@@ -1,3 +1,8 @@
+@php
+    $initialDate = \Carbon\Carbon::now()->subMonth(6)->format('Y-m-d');
+    $finalDate = \Carbon\Carbon::now()->format('Y-m-d');
+@endphp
+
 <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 py-2">
     <form method="POST" action="{{ route('purchase_orders.index') }}">
         @csrf
@@ -9,6 +14,8 @@
             @endforeach
         </select>
         <input type="text" name="user_name" class="border p-2 rounded-md w-full sm:w-64" placeholder="Nome do Usuário" value="{{ request('user_name') }}">
+        <input type="date" name="initial_date" class="border p-2 rounded-md w-full sm:w-40" value="{{ request('initial_date', $initialDate) }}">
+        <input type="date" name="final_date" class="border p-2 rounded-md w-full sm:w-40" value="{{ request('final_date', $finalDate) }}">
         <button type="submit" class="bg-blue-500 text-white rounded px-4 py-2 w-full sm:w-auto">{{ __('Filtrar') }}</button>
     </form>
     <a class="mt-4 inline-block bg-green-500 text-white rounded px-4 py-2 ml-2" href=" {{ route('purchase_orders.create') }} ">{{ __('Nova ordem de Compra') }}</a>

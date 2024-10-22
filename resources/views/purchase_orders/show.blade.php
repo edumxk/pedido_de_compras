@@ -33,6 +33,7 @@
                 @endforelse
                 @if(($purchase_order->status == 'budget' || $purchase_order->status == 'approved' ) && Auth::user()->is_buyer)
                     <a class="mt-4 inline-block bg-green-500 text-white rounded px-4 py-2 ml-2" href="{{ route('budgets.create', $purchase_order->hashedId ) }}">{{ __('Inserir Orçamento') }}</a>
+
                 @endif
                 @if($purchase_order->budgets->first() && $purchase_order->status == 'provision' && Auth::user()->is_admin == 1)
                     <form action="{{ route('budgets.reprove') }}" class="flex" method="post" >
@@ -47,7 +48,7 @@
             @endif
 
 
-            @if($purchase_order->status == 'opened' && Auth::user()->is_admin)
+            @if($purchase_order->status == 'opened' || $purchase_order->status =='approved' || $purchase_order->status == 'budget' && Auth::user()->is_admin)
                 <x-approver :purchase_order="$purchase_order"/>
             @endif
 

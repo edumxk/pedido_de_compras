@@ -10,10 +10,10 @@
         <div class="py-3">
             <label for="status" class="block text-lg font-medium text-gray-700 dark:text-gray-200">Status</label>
             <select class="mt-1 block w-full rounded-md bg-gray-100 dark:border-gray-600 focus:border-gray-500 focus:bg-white focus:ring-0 dark:bg-gray-800 dark:focus:bg-gray-800 dark:text-gray-200 dark:focus:border-gray-200" name="status" id="status">
-                <option value="opened">Pendente</option>
-                <option value="approved">Aprovar</option>
-                <option value="rejected">Reprovar</option>
-                <option value="received">Aprovação Direta Para Provisão</option>
+                <option value="opened" {{ $purchase_order->status == 'opened' ? 'selected' : '' }}>Pendente</option>
+                <option value="approved" {{ $purchase_order->status == 'approved' ? 'selected' : '' }}>Aprovar</option>
+                <option value="rejected" {{ $purchase_order->status == 'rejected' ? 'selected' : '' }}>Reprovar</option>
+                <option value="received" {{ $purchase_order->status == 'received' ? 'selected' : '' }}>Aprovação Direta Para Provisão</option>
             </select>
         </div>
 
