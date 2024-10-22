@@ -16,7 +16,7 @@
                                 </div>
                                 <div class="bg-white dark:bg-gray-800 px-4">
                                     @php
-                                        $days = $purchase_order->status == 'finished' || $purchase_order->status == 'canceled'
+                                        $days = $purchase_order->status == 'finished' || $purchase_order->status == 'rejected'
                                             ? \Carbon\Carbon::parse($purchase_order->interactions->last()->created_at)->diffInDays(\Carbon\Carbon::parse($purchase_order->created_at))
                                             : \Carbon\Carbon::parse($purchase_order->created_at)->diffInDays(\Carbon\Carbon::now());
                                     @endphp

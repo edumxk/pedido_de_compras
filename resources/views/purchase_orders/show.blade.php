@@ -47,8 +47,7 @@
                 <x-provision.index :purchase_order="$purchase_order"/>
             @endif
 
-
-            @if($purchase_order->status == 'opened' || $purchase_order->status =='approved' || $purchase_order->status == 'budget' && Auth::user()->is_admin)
+            @if(($purchase_order->status == 'opened' || $purchase_order->status =='approved' || $purchase_order->status == 'budget') && Auth::user()->is_admin)
                 <x-approver :purchase_order="$purchase_order"/>
             @endif
 
