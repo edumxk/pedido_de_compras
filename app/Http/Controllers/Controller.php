@@ -87,6 +87,7 @@ class Controller extends BaseController
             'users' => $users,
             'name' => $name,
             'id' => $purchase_order->id,
+            'hashedId' => $this->createHash($purchase_order->id),
         ];
 
         $email = new NotifyOrder($data);

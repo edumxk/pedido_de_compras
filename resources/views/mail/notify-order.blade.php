@@ -25,14 +25,14 @@
                             {{ $data['name'] }} atualizou a ordem de compra #{{ $data['id'] }}.
                         </p>
                         <p style="font-size: 16px; line-height: 24px; margin: 20px 0;">
-                            Para mais informações, acesse o sistema em <a href="https://compras.kokar.com.br" target="_blank">compras.kokar.com.br</a>.
+                            Para mais informações, acesse o sistema em <a href="https://compras.kokar.com.br/purchase_orders/{{ $data['hashedId'] }}" target="_blank">compras.kokar.com.br</a>.
                         </p>
                     </td>
                 </tr>
                 <tr>
                     <td align="center" style="padding: 20px 0;">
                         <p style="font-size: 14px; line-height: 20px; color: #666666; margin: 0;">
-                            © 2024 Kokar Tintas. Todos os direitos reservados.
+                            © 2025 Kokar Tintas. Todos os direitos reservados.
                         </p>
                     </td>
                 </tr>
