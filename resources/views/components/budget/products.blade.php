@@ -1,6 +1,6 @@
 @props(['budget'])
 <x-error/>
-<div class="relative overflow-x-auto shadow-md">
+<div class="relative overflow-x-auto shadow-md py-6">
     <table class="xl:min-w-[70vw] lg:min-w-full min-w-full mx-auto divide-y divide-gray-200 dark:divide-gray-700">
         @php $total = 0; @endphp
 
